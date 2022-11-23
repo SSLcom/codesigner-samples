@@ -1,0 +1,80 @@
+# The name of the workflow.
+name: (DLL) Dotnet Core Build and Sign
+
+# Trigger this workflow on a workflow_call
+on:
+  workflow_call:
+    secrets:
+      ES_USERNAME:
+        required: true
+      ES_PASSWORD:
+        required: true
+      CREDENTIAL_ID:
+        required: true
+      ES_TOTP_SECRET: 
+        required: true
+
+# Create an environment variable
+env:
+  PROJECT_NAME: HelloWorld
+  PROJECT_VERSION: 0.0.1
+  DOTNET_VERSION: 3.1
+
+# Defines a single job named "codesigner-dotnet-dll"
+jobs:
+  codesigner-dotnet-dll:
+    # Run job on Ubuntu Runner
+    runs-on: ubuntu-latest
+    # When the workflow runs, this is the name that is logged
+    name: CodeSigner on Dotnet
+    steps:
+      # 1) Check out the source code so that the workflow can access it.
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+
+      # 2) Set up the .NET CLI environment for the workflow to use.
+      - name: Setup Dotnet Core
+        uses: actions/setup-dotnet@v2
+        with:
+          dotnet-version: '3.1.x'
+
+      # 3) Create Artifact Directory to store signed and unsigned artifact files
+      - name: Create Artifacts Directory
+        shell: bash
+        run: |
+          mkdir ${GITHUB_WORKSPACE}/artifacts
+          mkdir ${GITHUB_WORKSPACE}/packages
+
+      # 4) Build a dotnet project or solution and all of its dependencies.
+      #    After it has been created dll or exe file, copy to 'packages' folder for siging
+      - name: Compile Dotnet Library
+        shell: bash
+        run: |
+          dotnet build dotnet/${{env.PROJECT_NAME}}.csproj -c Release
+          cp dotnet/bin/Release/netcoreapp${{env.DOTNET_VERSION}}/${{env.PROJECT_NAME}}-${{env.PROJECT_VERSION}}.dll ${GITHUB_WORKSPACE}/packages/${{env.PROJECT_NAME}}.dll
+
+      # 5) This is the step where the created DLL or EXE (artifact) files will be signed with CodeSignTool.
+      - name: Sign Artifact with CodeSignTool
+        uses: bayrakmustafa/actions-codesigner@develop
+        with:
+          # Sign and timestamp code object.
+          command: sign
+          # SSL.com account username
+          username: ${{secrets.ES_USERNAME}}
+          # SSL.com account password.
+          password: ${{secrets.ES_PASSWORD}}
+          # Credential ID for signing certificate.
+          credential_id: ${{secrets.CREDENTIAL_ID}}
+          # OAuth TOTP Secret (https://www.ssl.com/how-to/automate-esigner-ev-code-signing)
+          totp_secret: ${{secrets.ES_TOTP_SECRET}}
+          # Path of code object to be signed. (DLL, JAR, EXE, MSI files vb... )
+          file_path: ${GITHUB_WORKSPACE}/packages/${{env.PROJECT_NAME}}.dll
+          # Directory where signed code object(s) will be written.
+          output_path: ${GITHUB_WORKSPACE}/artifacts
+
+        # 6) This uploads artifacts from your workflow allowing you to share data between jobs and store data once a workflow is complete
+      - name: Upload Signed Files
+        uses: actions/upload-artifact@v2
+        with:
+          name: ${{env.PROJECT_NAME}}.dll
+          path: ./artifacts/${{env.PROJECT_NAME}}.dll

@@ -1,0 +1,398 @@
+# Windows Runner
+.windows_runners:
+  # Used to select runners from the list of available runners. A runner must have all tags listed here to run the job.
+  tags:
+    - shared-windows
+    - windows
+    - windows-1809
+
+# Groups jobs into stages. All jobs in one stage must complete before next stage is executed.
+stages:
+  - build
+  - sign
+
+# Defines environment variables globally. Job level property overrides global variables
+variables:
+  PROJECT_NAME: "HelloWorld"
+  PROJECT_VERSION: "0.0.1"
+  DOTNET_VERSION: "3.1"
+  ENVIRONMENT_NAME: "TEST"
+
+# Below is the definition of your job to build dll artifact
+build-dotnet:
+  # Define what stage the job will run in.
+  stage: build
+  # Full name of the image that should be used. It should contain the Registry part if needed.
+  image: mcr.microsoft.com/dotnet/sdk:3.1-bullseye
+  # Defines scripts that should run *before* the job. Can be set globally or per job.
+  before_script:
+    # Created directories for artifacts
+    - mkdir -p ${CI_PROJECT_DIR}/artifacts
+    - mkdir -p ${CI_PROJECT_DIR}/packages
+  # Shell scripts executed by the Runner. Build DLL artifact
+  script:
+    # Build dotnet project with Release configuration
+    - dotnet build dotnet/${PROJECT_NAME}.csproj -c Release
+    # Copy built artifacts to artifacts directory
+    - cp dotnet/bin/Release/netcoreapp${DOTNET_VERSION}/${PROJECT_NAME}-${PROJECT_VERSION}.dll ${CI_PROJECT_DIR}/packages/${PROJECT_NAME}.dll
+  # Used to specify a list of files and directories that should be attached to the job if it succeeds.
+  artifacts:
+    paths:
+      # Save artifact in order to use signing job
+      - ${CI_PROJECT_DIR}/packages/HelloWorld.dll
+    expire_in: 5 minutes
+
+# Below is the definition of your job to build and sign jar artifact with Maven
+build-maven-jar:
+  # Define what stage the job will run in.
+  stage: build
+  # Full name of the image that should be used. It should contain the Registry part if needed.
+  image: maven:3.8.3-openjdk-17
+  # Create an environment variable
+  variables:
+    # Set Maven build options
+    MAVEN_OPTS: "-Dhttps.protocols=TLSv1.2 -Dmaven.repo.local=$CI_PROJECT_DIR/.m2/repository -Dorg.slf4j.simpleLogger.log.org.apache.maven.cli.transfer.Slf4jMavenTransferListener=WARN -Dorg.slf4j.simpleLogger.showDateTime=true -Djava.awt.headless=true"
+    MAVEN_CLI_OPTS: "--batch-mode --errors --fail-at-end --show-version -DinstallAtEnd=true -DdeployAtEnd=true"
+  # Defines scripts that should run *before* the job. Can be set globally or per job.
+  before_script:
+    # Created directories for artifacts
+    - mkdir -p ${CI_PROJECT_DIR}/artifacts
+    - mkdir -p ${CI_PROJECT_DIR}/packages
+  # Shell scripts executed by the Runner. Build JAR artifact on Maven
+  script:
+    # Build Maven project with Maven Options
+    - mvn $MAVEN_CLI_OPTS clean install -f java/pom.xml
+    # Copy built artifacts to artifacts directory
+    - cp java/target/${PROJECT_NAME}-${PROJECT_VERSION}.jar ${CI_PROJECT_DIR}/packages/${PROJECT_NAME}.jar
+  # Used to specify a list of files and directories that should be attached to the job if it succeeds.
+  artifacts:
+    paths:
+      # Save artifact in order to use signing job
+      - ${CI_PROJECT_DIR}/packages/${PROJECT_NAME}.jar
+    expire_in: 5 minutes
+
+# Below is the definition of your job to build and sign jar artifact with Gradle
+build-gradle-jar:
+  # Define what stage the job will run in.
+  stage: build
+  # Full name of the image that should be used. It should contain the Registry part if needed.
+  image: gradle:alpine
+  # Defines environment variables for specific jobs.
+  variables:
+    # Set Gradle build options
+    GRADLE_OPTS: "-Dorg.gradle.daemon=false -Dorg.gradle.workers.max=8"
+  # Defines scripts that should run *before* the job. Can be set globally or per job.
+  before_script:
+    # Created directories for artifacts
+    - mkdir -p ${CI_PROJECT_DIR}/artifacts
+    - mkdir -p ${CI_PROJECT_DIR}/packages
+    # Set GRADLE home for building Java project
+    - GRADLE_USER_HOME="$(pwd)/.gradle"
+    - export GRADLE_USER_HOME
+  # Shell scripts executed by the Runner. Build JAR artifact on Gradle
+  script:
+    # Build Gradle project for Jar artifact
+    - gradle clean build -p java -PsetupType=jar
+    # Copy built artifacts to artifacts directory
+    - cp java/build/libs/${PROJECT_NAME}-${PROJECT_VERSION}.jar ${CI_PROJECT_DIR}/packages/${PROJECT_NAME}.jar
+  # Used to specify a list of files and directories that should be attached to the job if it succeeds
+  artifacts:
+    paths:
+      # Save artifact in order to use signing job
+      - ${CI_PROJECT_DIR}/packages/${PROJECT_NAME}.jar
+    expire_in: 5 minutes
+
+# Below is the definition of your job to build exe artifact with Gradle
+build-gradle-exe:
+  # Define what stage the job will run in.
+  stage: build
+  # Runner for MSI Build on Windows
+  extends:
+    - .windows_runners
+  # Defines environment variables for specific jobs.
+  variables:
+    # Set JVM options
+    JVM_OPTS: -Xmx3200m
+    TERM: dumb
+    # Set Gradle build options
+    GRADLE_OPTS: "-Dorg.gradle.daemon=false -Dorg.gradle.workers.max=8"
+  # Defines scripts that should run *before* the job. Can be set globally or per job.
+  before_script:
+    # Created directories for artifacts
+    - mkdir -p ${CI_PROJECT_DIR}/artifacts
+    - mkdir -p ${CI_PROJECT_DIR}/packages
+    # Enable .NET Framework Core for building .NET project with WIX
+    - powershell.exe -ExecutionPolicy Bypass Install-WindowsFeature Net-Framework-Core
+    # Enable global confirmation for choco package installation
+    - choco feature enable -n allowGlobalConfirmation
+    # Install Dotnet3.5
+    - choco install dotnet3.5 --version=3.5.20160716 -y
+    # Install Oracle JDK 17.0.2
+    - choco install oraclejdk --version=17.0.2 -y
+    # Install Gradle 7.4
+    - choco install gradle --version=7.4 -y
+    # Install WIX 3.11.2
+    - choco install wixtoolset --version=3.11.2 -y
+    # Set Default JDK version for Gradle Build
+    - New-Item ${CI_PROJECT_DIR}/java/gradle.properties
+    - Set-Content ${CI_PROJECT_DIR}/java/gradle.properties 'org.gradle.java.home=C:/Program Files/Java/jdk-17.0.2'
+  # Shell scripts executed by the Runner. Build EXE artifact on Windows
+  script:
+    # Build Gradle project for EXE artifact with jpackage
+    - gradle build jpackage -x test --warning-mode all -p java -PsetupType=exe
+    # Copy built artifacts to artifacts directory
+    - Copy-Item "java/build/release/windows/*.exe" -Destination "${CI_PROJECT_DIR}/packages/${PROJECT_NAME}.exe"
+  # Used to specify a list of files and directories that should be attached to the job if it succeeds
+  artifacts:
+    paths:
+      # Save artifact in order to use signing job
+      - ${CI_PROJECT_DIR}/packages/${PROJECT_NAME}.exe
+    expire_in: 5 minutes
+
+# Below is the definition of your job to build msi artifact with Gradle
+build-gradle-msi:
+  # Define what stage the job will run in.
+  stage: build
+  # Runner for MSI Build on Windows
+  extends:
+    - .windows_runners
+  # Defines environment variables for specific jobs.
+  variables:
+    # Set JVM options
+    JVM_OPTS: -Xmx3200m
+    TERM: dumb
+    # Set Gradle build options
+    GRADLE_OPTS: "-Dorg.gradle.daemon=false -Dorg.gradle.workers.max=8"
+  # Defines scripts that should run *before* the job. Can be set globally or per job.
+  before_script:
+    # Created directories for artifacts
+    - mkdir -p ${CI_PROJECT_DIR}/artifacts
+    - mkdir -p ${CI_PROJECT_DIR}/packages
+    # Enable .NET Framework Core for building .NET project with WIX
+    - powershell.exe -ExecutionPolicy Bypass Install-WindowsFeature Net-Framework-Core
+    # Enable global confirmation for choco package installation
+    - choco feature enable -n allowGlobalConfirmation
+    # Install Dotnet3.5
+    - choco install dotnet3.5 --version=3.5.20160716 -y
+    # Install Oracle JDK 17.0.2
+    - choco install oraclejdk --version=17.0.2 -y
+    # Install Gradle 7.4
+    - choco install gradle --version=7.4 -y
+    # Install WIX 3.11.2
+    - choco install wixtoolset --version=3.11.2 -y
+    # Set Default JDK version for Gradle Build
+    - New-Item ${CI_PROJECT_DIR}/java/gradle.properties
+    - Set-Content ${CI_PROJECT_DIR}/java/gradle.properties 'org.gradle.java.home=C:/Program Files/Java/jdk-17.0.2'
+  # Shell scripts executed by the Runner. Build MSI artifact on Windows
+  script:
+    # Build Gradle project for MSI artifact with jpackage
+    - gradle build jpackage -x test --warning-mode all -p java -PsetupType=msi
+    # Copy built artifacts to artifacts directory
+    - Copy-Item "java/build/release/windows/*.msi" -Destination "${CI_PROJECT_DIR}/packages/${PROJECT_NAME}.msi"
+  # Used to specify a list of files and directories that should be attached to the job if it succeeds
+  artifacts:
+    paths:
+      # Save artifact in order to use signing job
+      - ${CI_PROJECT_DIR}/packages/${PROJECT_NAME}.msi
+    expire_in: 5 minutes
+
+# Below is the definition of your job to sign dll artifact
+sign-dotnet-artifacts:
+  # Define what stage the job will run in.
+  stage: sign
+  # Full name of the image that should be used. It should contain the Registry part if needed.
+  image: docker:19.03.0
+  # Similar to `image` property, but will link the specified services to the `image` container.
+  services:
+    - docker:19.03.0-dind
+  # Defines environment variables for specific jobs.
+  variables:
+    COMMAND: "sign"
+  # Defines scripts that should run *before* the job. Can be set globally or per job.
+  before_script:
+    # Created directories for signed artifacts
+    - mkdir -p ${CI_PROJECT_DIR}/artifacts
+    - mkdir -p ${CI_PROJECT_DIR}/packages
+  # Shell scripts executed by the Runner. Sign dotnet dll artifact with CodeSignTool Docker Image
+  script:
+    # Docker Pull CodeSigner Docker Image
+    - docker pull ghcr.io/bayrakmustafa/codesigner:latest
+    # Sign artifact with CodeSigner docker image
+    - docker run -i --rm --dns 8.8.8.8 --network host --volume ${CI_PROJECT_DIR}/packages:/codesign/examples --volume ${CI_PROJECT_DIR}/artifacts:/codesign/output -e USERNAME=${USERNAME} -e PASSWORD=${PASSWORD} -e CREDENTIAL_ID=${CREDENTIAL_ID} -e TOTP_SECRET=${TOTP_SECRET} -e ENVIRONMENT_NAME=${ENVIRONMENT_NAME} ghcr.io/bayrakmustafa/codesigner:latest ${COMMAND} -input_file_path=/codesign/examples/${PROJECT_NAME}.dll -output_dir_path=/codesign/output
+  # Used to specify a list of files and directories that should be attached to the job if it succeeds.
+  artifacts:
+    paths:
+      # Save signed artifact for downloading
+      - ${CI_PROJECT_DIR}/artifacts/${PROJECT_NAME}.dll
+    expire_in: 1 days
+  # Specify a list of job names from earlier stages from which artifacts should be loaded
+  dependencies:
+    - build-dotnet
+
+# Below is the definition of your job to sign maven jar artifacts
+sign-maven-artifacts:
+  # Define what stage the job will run in.
+  stage: sign
+  # Full name of the image that should be used. It should contain the Registry part if needed.
+  image: docker:19.03.0
+  # Similar to `image` property, but will link the specified services to the `image` container.
+  services:
+    - docker:19.03.0-dind
+  # Defines environment variables for specific jobs.
+  variables:
+    COMMAND: "sign"
+  # Defines scripts that should run *before* the job. Can be set globally or per job.
+  before_script:
+    # Created directories for signed artifacts
+    - mkdir -p ${CI_PROJECT_DIR}/artifacts
+    - mkdir -p ${CI_PROJECT_DIR}/packages
+    # Copy artifact to be signing path
+    - cp ${CI_PROJECT_DIR}/packages/${PROJECT_NAME}.jar ${CI_PROJECT_DIR}/packages/${PROJECT_NAME}-Maven.jar
+  # Shell scripts executed by the Runner. Sign dotnet jar artifact with CodeSignTool Docker Image
+  script:
+    # Docker Pull CodeSigner Docker Image
+    - docker pull ghcr.io/bayrakmustafa/codesigner:latest
+    # Sign artifact with CodeSigner docker image
+    - docker run -i --rm --dns 8.8.8.8 --network host --volume ${CI_PROJECT_DIR}/packages:/codesign/examples --volume ${CI_PROJECT_DIR}/artifacts:/codesign/output -e USERNAME=${USERNAME} -e PASSWORD=${PASSWORD} -e CREDENTIAL_ID=${CREDENTIAL_ID} -e TOTP_SECRET=${TOTP_SECRET} -e ENVIRONMENT_NAME=${ENVIRONMENT_NAME} ghcr.io/bayrakmustafa/codesigner:latest ${COMMAND} -input_file_path=/codesign/examples/${PROJECT_NAME}-Maven.jar -output_dir_path=/codesign/output
+  # Used to specify a list of files and directories that should be attached to the job if it succeeds.
+  artifacts:
+    paths:
+      # Save signed artifact for downloading
+      - ${CI_PROJECT_DIR}/artifacts/${PROJECT_NAME}-Maven.jar
+    expire_in: 1 days
+  # Specify a list of job names from earlier stages from which artifacts should be loaded
+  dependencies:
+    - build-maven-jar
+
+# Below is the definition of your job to sign gradle jar artifacts
+sign-gradle-artifacts:
+  # Define what stage the job will run in.
+  stage: sign
+  # Full name of the image that should be used. It should contain the Registry part if needed.
+  image: docker:19.03.0
+  # Similar to `image` property, but will link the specified services to the `image` container.
+  services:
+    - docker:19.03.0-dind
+  # Defines environment variables for specific jobs.
+  variables:
+    COMMAND: "sign"
+  # Defines scripts that should run *before* the job. Can be set globally or per job.
+  before_script:
+    # Created directories for signed artifacts
+    - mkdir -p ${CI_PROJECT_DIR}/artifacts
+    - mkdir -p ${CI_PROJECT_DIR}/packages
+    # Copy artifact to be signing path
+    - cp ${CI_PROJECT_DIR}/packages/${PROJECT_NAME}.jar ${CI_PROJECT_DIR}/packages/${PROJECT_NAME}-Gradle.jar
+  # Shell scripts executed by the Runner. Sign dotnet jar artifact with CodeSignTool Docker Image
+  script:
+    # Docker Pull CodeSigner Docker Image
+    - docker pull ghcr.io/bayrakmustafa/codesigner:latest
+    # Sign artifact with CodeSigner docker image
+    - docker run -i --rm --dns 8.8.8.8 --network host --volume ${CI_PROJECT_DIR}/packages:/codesign/examples --volume ${CI_PROJECT_DIR}/artifacts:/codesign/output -e USERNAME=${USERNAME} -e PASSWORD=${PASSWORD} -e CREDENTIAL_ID=${CREDENTIAL_ID} -e TOTP_SECRET=${TOTP_SECRET} -e ENVIRONMENT_NAME=${ENVIRONMENT_NAME} ghcr.io/bayrakmustafa/codesigner:latest ${COMMAND} -input_file_path=/codesign/examples/${PROJECT_NAME}-Gradle.jar -output_dir_path=/codesign/output
+  # Used to specify a list of files and directories that should be attached to the job if it succeeds.
+  artifacts:
+    paths:
+      # Save signed artifact for downloading
+      - ${CI_PROJECT_DIR}/artifacts/${PROJECT_NAME}-Gradle.jar
+    expire_in: 1 days
+  # Specify a list of job names from earlier stages from which artifacts should be loaded
+  dependencies:
+    - build-gradle-jar
+
+# Below is the definition of your job to sign msi artifacts
+sign-gradle-msi-artifacts:
+  # Define what stage the job will run in.
+  stage: sign
+  # Full name of the image that should be used. It should contain the Registry part if needed.
+  image: docker:19.03.0
+  # Similar to `image` property, but will link the specified services to the `image` container.
+  services:
+    - docker:19.03.0-dind
+  # Defines environment variables for specific jobs.
+  variables:
+    COMMAND: "sign"
+  # Defines scripts that should run *before* the job. Can be set globally or per job.
+  before_script:
+    # Created directories for signed artifacts
+    - mkdir -p ${CI_PROJECT_DIR}/artifacts
+    - mkdir -p ${CI_PROJECT_DIR}/packages
+  # Shell scripts executed by the Runner. Sign dotnet msi artifact with CodeSignTool Docker Image
+  script:
+    # Docker Pull CodeSigner Docker Image
+    - docker pull ghcr.io/bayrakmustafa/codesigner:latest
+    # Sign artifact with CodeSigner docker image
+    - docker run -i --rm --dns 8.8.8.8 --network host --volume ${CI_PROJECT_DIR}/packages:/codesign/examples --volume ${CI_PROJECT_DIR}/artifacts:/codesign/output -e USERNAME=${USERNAME} -e PASSWORD=${PASSWORD} -e CREDENTIAL_ID=${CREDENTIAL_ID} -e TOTP_SECRET=${TOTP_SECRET} -e ENVIRONMENT_NAME=${ENVIRONMENT_NAME} ghcr.io/bayrakmustafa/codesigner:latest ${COMMAND} -input_file_path=/codesign/examples/${PROJECT_NAME}.msi -output_dir_path=/codesign/output
+  # Used to specify a list of files and directories that should be attached to the job if it succeeds.
+  artifacts:
+    paths:
+      # Save signed artifact for downloading
+      - ${CI_PROJECT_DIR}/artifacts/${PROJECT_NAME}.msi
+    expire_in: 1 days
+  # Specify a list of job names from earlier stages from which artifacts should be loaded
+  dependencies:
+    - build-gradle-msi
+
+# Below is the definition of your job to sign exe artifacts
+sign-gradle-exe-artifacts:
+  # Define what stage the job will run in.
+  stage: sign
+  # Full name of the image that should be used. It should contain the Registry part if needed.
+  image: docker:19.03.0
+  # Similar to `image` property, but will link the specified services to the `image` container.
+  services:
+    - docker:19.03.0-dind
+  # Defines environment variables for specific jobs.
+  variables:
+    COMMAND: "sign"
+  # Defines scripts that should run *before* the job. Can be set globally or per job.
+  before_script:
+    # Created directories for signed artifacts
+    - mkdir -p ${CI_PROJECT_DIR}/artifacts
+    - mkdir -p ${CI_PROJECT_DIR}/packages
+  # Shell scripts executed by the Runner. Sign dotnet exe artifact with CodeSignTool Docker Image
+  script:
+    # Docker Pull CodeSigner Docker Image
+    - docker pull ghcr.io/bayrakmustafa/codesigner:latest
+    # Sign artifact with CodeSigner docker image
+    - docker run -i --rm --dns 8.8.8.8 --network host --volume ${CI_PROJECT_DIR}/packages:/codesign/examples --volume ${CI_PROJECT_DIR}/artifacts:/codesign/output -e USERNAME=${USERNAME} -e PASSWORD=${PASSWORD} -e CREDENTIAL_ID=${CREDENTIAL_ID} -e TOTP_SECRET=${TOTP_SECRET} -e ENVIRONMENT_NAME=${ENVIRONMENT_NAME} ghcr.io/bayrakmustafa/codesigner:latest ${COMMAND} -input_file_path=/codesign/examples/${PROJECT_NAME}.exe -output_dir_path=/codesign/output
+  # Used to specify a list of files and directories that should be attached to the job if it succeeds.
+  artifacts:
+    paths:
+      # Save signed artifact for downloading
+      - ${CI_PROJECT_DIR}/artifacts/${PROJECT_NAME}.exe
+    expire_in: 1 days
+  # Specify a list of job names from earlier stages from which artifacts should be loaded
+  dependencies:
+    - build-gradle-exe
+
+# Below is the definition of your job to sign ps1 artifacts
+sign-ps1-artifacts:
+  # Define what stage the job will run in.
+  stage: sign
+  # Full name of the image that should be used. It should contain the Registry part if needed.
+  image: docker:19.03.0
+  # Similar to `image` property, but will link the specified services to the `image` container.
+  services:
+    - docker:19.03.0-dind
+  # Defines environment variables for specific jobs.
+  variables:
+    COMMAND: "sign"
+  # Defines scripts that should run *before* the job. Can be set globally or per job.
+  before_script:
+    # Created directories for signed artifacts
+    - mkdir -p ${CI_PROJECT_DIR}/artifacts
+    - mkdir -p ${CI_PROJECT_DIR}/packages
+    # Copy ps1 script for signing
+    - cp powershell/${PROJECT_NAME}.ps1 ${CI_PROJECT_DIR}/packages/${PROJECT_NAME}.ps1
+  # Shell scripts executed by the Runner. Sign dotnet ps1 artifact with CodeSignTool Docker Image
+  script:
+    # Docker Pull CodeSigner Docker Image
+    - docker pull ghcr.io/bayrakmustafa/codesigner:latest
+    # Sign artifact with CodeSigner docker image
+    - docker run -i --rm --dns 8.8.8.8 --network host --volume ${CI_PROJECT_DIR}/packages:/codesign/examples --volume ${CI_PROJECT_DIR}/artifacts:/codesign/output -e USERNAME=${USERNAME} -e PASSWORD=${PASSWORD} -e CREDENTIAL_ID=${CREDENTIAL_ID} -e TOTP_SECRET=${TOTP_SECRET} -e ENVIRONMENT_NAME=${ENVIRONMENT_NAME} ghcr.io/bayrakmustafa/codesigner:latest ${COMMAND} -input_file_path=/codesign/examples/${PROJECT_NAME}.ps1 -output_dir_path=/codesign/output
+  # Used to specify a list of files and directories that should be attached to the job if it succeeds.
+  artifacts:
+    paths:
+      # Save signed artifact for downloading
+      - ${CI_PROJECT_DIR}/artifacts/${PROJECT_NAME}.ps1
+    expire_in: 1 days

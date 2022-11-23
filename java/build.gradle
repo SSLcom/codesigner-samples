@@ -1,0 +1,65 @@
+import org.gradle.internal.os.OperatingSystem
+
+plugins {
+    id 'java'
+    id 'eclipse'
+    id 'application'
+    id 'org.beryx.runtime' version '1.12.4'
+}
+
+mainClassName = 'com.ssl.codesigner.samples.HelloWorld'
+
+repositories {
+    mavenCentral()
+}
+
+jar {
+    archiveBaseName = 'HelloWorld'
+    archiveVersion =  '0.0.1'
+    manifest {
+        attributes 'Main-Class': mainClassName
+    }
+}
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+dependencies {
+}
+
+runtime {
+
+    modules = ['java.desktop','java.naming','java.smartcardio','jdk.security.auth','jdk.crypto.ec','jdk.crypto.cryptoki']
+    options = ['--strip-debug', '--compress', '1', '--no-header-files', '--no-man-pages']
+
+    jpackage {
+
+        appVersion = '0.0.1'
+        installerName = ''
+        imageName = ''
+        description = ''
+
+        setupType = project.properties["setupType"]
+        installerOptions += ['--copyright','(C) SSL.com 2022-2022', '--vendor','SSL.com']
+
+        switch (OperatingSystem.current()) {
+			case OperatingSystem.WINDOWS:
+                outputDir = 'release/windows'
+                installerType = setupType
+                skipInstaller = false
+                installerOptions += ['--win-menu', '--win-shortcut', '--win-dir-chooser','--win-upgrade-uuid','176e5402-095b-11eb-adc1-0242ac120002']
+                break;
+			case OperatingSystem.MAC_OS:
+                outputDir = 'release/macos'
+                installerType = 'dmg'
+                skipInstaller = false
+                break;
+			case OperatingSystem.LINUX:
+                outputDir = 'release/linux'
+                installerType = 'deb'
+                skipInstaller = false
+            	installerOptions += ['--linux-menu-group', 'Office', '--linux-shortcut']
+                break;
+        }
+    }
+}

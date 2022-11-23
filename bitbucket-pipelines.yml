@@ -1,0 +1,128 @@
+pipelines:
+  default:
+    - step:
+        # You can add a name to a step to make displays and reports easier to read and understand.
+        name: build-dotnet
+        # Name of the Docker image which may or may not include registry URL, tag, and digest value
+        image: mcr.microsoft.com/dotnet/sdk:3.1-bullseye
+        # Commands to execute in the step
+        script:
+          # Created directories for artifacts
+          - mkdir -p ${BITBUCKET_CLONE_DIR}/artifacts
+          - mkdir -p ${BITBUCKET_CLONE_DIR}/packages
+          # Build dotnet project with Release configuration
+          - dotnet build dotnet/HelloWorld.csproj -c Release
+          # Copy built artifacts to artifacts directory
+          - cp dotnet/bin/Release/netcoreapp3.1/HelloWorld-0.0.1.dll ${BITBUCKET_CLONE_DIR}/packages/HelloWorld.dll
+        # Files produced by a step to share with a following step
+        artifacts:
+          - packages/HelloWorld.dll
+    - step:
+        # You can add a name to a step to make displays and reports easier to read and understand.
+        name: build-maven-java
+        # Name of the Docker image which may or may not include registry URL, tag, and digest value
+        image: maven:3.6.3
+        # Caches enabled for the step
+        caches:
+          - maven
+        # Commands to execute in the step
+        script:
+          # Created directories for artifacts
+          - mkdir -p ${BITBUCKET_CLONE_DIR}/artifacts
+          - mkdir -p ${BITBUCKET_CLONE_DIR}/packages
+          # Build Maven project with Maven Options
+          - mvn --batch-mode --errors --fail-at-end --show-version -DinstallAtEnd=true -DdeployAtEnd=true clean install -f java/pom.xml
+          # Copy built artifacts to artifacts directory
+          - cp java/target/HelloWorld-0.0.1.jar ${BITBUCKET_CLONE_DIR}/packages/HelloWorld-Maven.jar
+        # Files produced by a step to share with a following step
+        artifacts:
+          - packages/HelloWorld-Maven.jar
+    - step:
+        # You can add a name to a step to make displays and reports easier to read and understand.
+        name: build-gradle-java
+        # Name of the Docker image which may or may not include registry URL, tag, and digest value
+        image: gradle:7.2-jdk11
+        # Caches enabled for the step
+        caches:
+          - gradle
+        # Commands to execute in the step
+        script:
+          # Created directories for artifacts
+          - mkdir -p ${BITBUCKET_CLONE_DIR}/artifacts
+          - mkdir -p ${BITBUCKET_CLONE_DIR}/packages
+          # Set GRADLE options for building Java project
+          - export GRADLE_OPTS="-Dorg.gradle.daemon=false -Dorg.gradle.workers.max=4"
+          - touch ${BITBUCKET_CLONE_DIR}/java/gradle.properties
+          - echo "${BITBUCKET_CLONE_DIR}/java/gradle.properties" >> 'org.gradle.daemon=false'
+          - echo "${BITBUCKET_CLONE_DIR}/java/gradle.properties" >> 'org.gradle.workers.max=4'
+          # Build Maven project with Maven Options
+          - gradle clean build -p java -PsetupType=jar
+          # Copy built artifacts to artifacts directory
+          - cp java/build/libs/HelloWorld-0.0.1.jar ${BITBUCKET_CLONE_DIR}/packages/HelloWorld-Gradle.jar
+        # Files produced by a step to share with a following step
+        artifacts:
+          - packages/HelloWorld-Gradle.jar
+
+    - step:
+        # You can add a name to a step to make displays and reports easier to read and understand.
+        name: sign-dotnet-artifacts
+        # Services enabled for the step
+        services:
+          - docker
+        # Commands to execute in the step
+        script:
+          # Created directories for artifacts
+          - mkdir -p ${BITBUCKET_CLONE_DIR}/artifacts
+          - mkdir -p ${BITBUCKET_CLONE_DIR}/packages
+          # Fixed dotnet permission issue
+          - chmod -R 777 ${BITBUCKET_CLONE_DIR}/packages
+          # Docker Pull CodeSigner Docker Image
+          - docker pull ghcr.io/bayrakmustafa/codesigner:latest
+          # Sign artifact with CodeSigner docker image
+          - docker run -i --rm --dns 8.8.8.8 --volume ${BITBUCKET_CLONE_DIR}/packages:/codesign/examples --volume ${BITBUCKET_CLONE_DIR}/artifacts:/codesign/output -e USERNAME=${USERNAME} -e PASSWORD=${PASSWORD} -e CREDENTIAL_ID=${CREDENTIAL_ID} -e TOTP_SECRET=${TOTP_SECRET} -e ENVIRONMENT_NAME=${ENVIRONMENT_NAME} ghcr.io/bayrakmustafa/codesigner:latest sign -input_file_path=/codesign/examples/HelloWorld.dll -output_dir_path=/codesign/output
+    - step:
+        # You can add a name to a step to make displays and reports easier to read and understand.
+        name: sign-maven-artifacts
+        # Services enabled for the step
+        services:
+          - docker
+        # Commands to execute in the step
+        script:
+          # Created directories for artifacts
+          - mkdir -p ${BITBUCKET_CLONE_DIR}/artifacts
+          - mkdir -p ${BITBUCKET_CLONE_DIR}/packages
+          # Docker Pull CodeSigner Docker Image
+          - docker pull ghcr.io/bayrakmustafa/codesigner:latest
+          # Sign artifact with CodeSigner docker image
+          - docker run -i --rm --dns 8.8.8.8 --volume ${BITBUCKET_CLONE_DIR}/packages:/codesign/examples --volume ${BITBUCKET_CLONE_DIR}/artifacts:/codesign/output -e USERNAME=${USERNAME} -e PASSWORD=${PASSWORD} -e CREDENTIAL_ID=${CREDENTIAL_ID} -e TOTP_SECRET=${TOTP_SECRET} -e ENVIRONMENT_NAME=${ENVIRONMENT_NAME} ghcr.io/bayrakmustafa/codesigner:latest sign -input_file_path=/codesign/examples/HelloWorld-Maven.jar -output_dir_path=/codesign/output
+    - step:
+        # You can add a name to a step to make displays and reports easier to read and understand.
+        name: sign-gradle-artifacts
+        # Services enabled for the step
+        services:
+          - docker
+        # Commands to execute in the step
+        script:
+          # Created directories for artifacts
+          - mkdir -p ${BITBUCKET_CLONE_DIR}/artifacts
+          - mkdir -p ${BITBUCKET_CLONE_DIR}/packages
+          # Docker Pull CodeSigner Docker Image
+          - docker pull ghcr.io/bayrakmustafa/codesigner:latest
+          # Sign artifact with CodeSigner docker image
+          - docker run -i --rm --dns 8.8.8.8 --volume ${BITBUCKET_CLONE_DIR}/packages:/codesign/examples --volume ${BITBUCKET_CLONE_DIR}/artifacts:/codesign/output -e USERNAME=${USERNAME} -e PASSWORD=${PASSWORD} -e CREDENTIAL_ID=${CREDENTIAL_ID} -e TOTP_SECRET=${TOTP_SECRET} -e ENVIRONMENT_NAME=${ENVIRONMENT_NAME} ghcr.io/bayrakmustafa/codesigner:latest sign -input_file_path=/codesign/examples/HelloWorld-Gradle.jar -output_dir_path=/codesign/output
+    - step:
+        # You can add a name to a step to make displays and reports easier to read and understand.
+        name: sign-ps1-artifacts
+        # Services enabled for the step
+        services:
+          - docker
+        script:
+          # Created directories for artifacts
+          - mkdir -p ${BITBUCKET_CLONE_DIR}/artifacts
+          - mkdir -p ${BITBUCKET_CLONE_DIR}/packages
+          # Copy ps1 script for signing
+          - cp powershell/HelloWorld.ps1 ${BITBUCKET_CLONE_DIR}/packages/HelloWorld.ps1
+          # Docker Pull CodeSigner Docker Image
+          - docker pull ghcr.io/bayrakmustafa/codesigner:latest
+          # Sign artifact with CodeSigner docker image
+          - docker run -i --rm --dns 8.8.8.8 --volume ${BITBUCKET_CLONE_DIR}/packages:/codesign/examples --volume ${BITBUCKET_CLONE_DIR}/artifacts:/codesign/output -e USERNAME=${USERNAME} -e PASSWORD=${PASSWORD} -e CREDENTIAL_ID=${CREDENTIAL_ID} -e TOTP_SECRET=${TOTP_SECRET} -e ENVIRONMENT_NAME=${ENVIRONMENT_NAME} ghcr.io/bayrakmustafa/codesigner:latest sign -input_file_path=/codesign/examples/HelloWorld.ps1 -output_dir_path=/codesign/output
