@@ -59,7 +59,7 @@ codesigner-sign-artifact:
       - run:
           name: Docker Pull Image
           command: |
-            docker pull ghcr.io/bayrakmustafa/codesigner:latest
+            docker pull ghcr.io/sslcom/codesigner:latest
             docker pull alpine:3.4
 
       # 5) This is the step where the created DLL, JAR, EXE, MSI, PS1 (artifact) files will be signed with CodeSignTool.
@@ -72,7 +72,7 @@ codesigner-sign-artifact:
             docker run -i --rm --dns 8.8.8.8 --network host --volumes-from codesign-in --volumes-from codesign-out 
               -e USERNAME=${USERNAME} -e PASSWORD=${PASSWORD} -e CREDENTIAL_ID=${CREDENTIAL_ID} 
               -e TOTP_SECRET=${TOTP_SECRET} -e ENVIRONMENT_NAME=${ENVIRONMENT_NAME} 
-              ghcr.io/bayrakmustafa/codesigner:latest ${COMMAND} 
+              ghcr.io/sslcom/codesigner:latest ${COMMAND} 
               -input_file_path=/codesign/packages/<< parameters.artifact-name >> -output_dir_path=/codesign/artifacts
             docker cp codesign-out:/codesign/artifacts/<< parameters.artifact-name >> ${WORKSPACE}/artifacts/<< parameters.artifact-name >>
 
@@ -225,7 +225,7 @@ jobs:
         - run:
             name: Docker Pull Image
             command: |
-              docker pull ghcr.io/bayrakmustafa/codesigner:latest
+              docker pull ghcr.io/sslcom/codesigner:latest
               docker pull alpine:3.4
 
         # 5) This is the step where the created DLL, JAR, EXE, MSI, PS1 (artifact) files will be signed with CodeSignTool.
@@ -235,7 +235,7 @@ jobs:
               docker create -v /codesign/packages  --name codesign-in  alpine:3.4 /bin/true
               docker create -v /codesign/artifacts --name codesign-out alpine:3.4 /bin/true
               docker cp ${WORKSPACE}/packages/<< parameters.artifact-name >> codesign-in:/codesign/packages
-              docker run -i --rm --dns 8.8.8.8 --network host --volumes-from codesign-in --volumes-from codesign-out -e USERNAME=${USERNAME} -e PASSWORD=${PASSWORD} -e CREDENTIAL_ID=${CREDENTIAL_ID} -e TOTP_SECRET=${TOTP_SECRET} -e ENVIRONMENT_NAME=${ENVIRONMENT_NAME} ghcr.io/bayrakmustafa/codesigner:latest ${COMMAND} -input_file_path=/codesign/packages/<< parameters.artifact-name >> -output_dir_path=/codesign/artifacts
+              docker run -i --rm --dns 8.8.8.8 --network host --volumes-from codesign-in --volumes-from codesign-out -e USERNAME=${USERNAME} -e PASSWORD=${PASSWORD} -e CREDENTIAL_ID=${CREDENTIAL_ID} -e TOTP_SECRET=${TOTP_SECRET} -e ENVIRONMENT_NAME=${ENVIRONMENT_NAME} ghcr.io/sslcom/codesigner:latest ${COMMAND} -input_file_path=/codesign/packages/<< parameters.artifact-name >> -output_dir_path=/codesign/artifacts
               docker cp codesign-out:/codesign/artifacts/<< parameters.artifact-name >> ${WORKSPACE}/artifacts/<< parameters.artifact-name >>
 
         # 6) This uploads artifacts from your workflow allowing you to share data between jobs and store data once a workflow is complete
@@ -368,7 +368,7 @@ jobs:
         - run:
             name: Docker Pull Image
             command: |
-              docker pull ghcr.io/bayrakmustafa/codesigner:latest
+              docker pull ghcr.io/sslcom/codesigner:latest
               docker pull alpine:3.4
 
         # 5) This is the step where the created DLL, JAR, EXE, MSI, PS1 (artifact) files will be signed with CodeSignTool.
@@ -378,7 +378,7 @@ jobs:
               docker create -v /codesign/packages  --name codesign-in  alpine:3.4 /bin/true
               docker create -v /codesign/artifacts --name codesign-out alpine:3.4 /bin/true
               docker cp ${WORKSPACE}/packages/<< parameters.artifact-name >> codesign-in:/codesign/packages
-              docker run -i --rm --dns 8.8.8.8 --network host --volumes-from codesign-in --volumes-from codesign-out -e USERNAME=${USERNAME} -e PASSWORD=${PASSWORD} -e CREDENTIAL_ID=${CREDENTIAL_ID} -e TOTP_SECRET=${TOTP_SECRET} -e ENVIRONMENT_NAME=${ENVIRONMENT_NAME} ghcr.io/bayrakmustafa/codesigner:latest ${COMMAND} -input_file_path=/codesign/packages/<< parameters.artifact-name >> -output_dir_path=/codesign/artifacts
+              docker run -i --rm --dns 8.8.8.8 --network host --volumes-from codesign-in --volumes-from codesign-out -e USERNAME=${USERNAME} -e PASSWORD=${PASSWORD} -e CREDENTIAL_ID=${CREDENTIAL_ID} -e TOTP_SECRET=${TOTP_SECRET} -e ENVIRONMENT_NAME=${ENVIRONMENT_NAME} ghcr.io/sslcom/codesigner:latest ${COMMAND} -input_file_path=/codesign/packages/<< parameters.artifact-name >> -output_dir_path=/codesign/artifacts
               docker cp codesign-out:/codesign/artifacts/<< parameters.artifact-name >> ${WORKSPACE}/artifacts/<< parameters.artifact-name >>
 
         # 6) This uploads artifacts from your workflow allowing you to share data between jobs and store data once a workflow is complete
@@ -517,7 +517,7 @@ jobs:
         - run:
             name: Docker Pull Image
             command: |
-              docker pull ghcr.io/bayrakmustafa/codesigner:latest
+              docker pull ghcr.io/sslcom/codesigner:latest
               docker pull alpine:3.4
 
         # 5) This is the step where the created DLL, JAR, EXE, MSI, PS1 (artifact) files will be signed with CodeSignTool.
@@ -527,7 +527,7 @@ jobs:
               docker create -v /codesign/packages  --name codesign-in  alpine:3.4 /bin/true
               docker create -v /codesign/artifacts --name codesign-out alpine:3.4 /bin/true
               docker cp ${WORKSPACE}/packages/<< parameters.artifact-name >> codesign-in:/codesign/packages
-              docker run -i --rm --dns 8.8.8.8 --network host --volumes-from codesign-in --volumes-from codesign-out -e USERNAME=${USERNAME} -e PASSWORD=${PASSWORD} -e CREDENTIAL_ID=${CREDENTIAL_ID} -e TOTP_SECRET=${TOTP_SECRET} -e ENVIRONMENT_NAME=${ENVIRONMENT_NAME} ghcr.io/bayrakmustafa/codesigner:latest ${COMMAND} -input_file_path=/codesign/packages/<< parameters.artifact-name >> -output_dir_path=/codesign/artifacts
+              docker run -i --rm --dns 8.8.8.8 --network host --volumes-from codesign-in --volumes-from codesign-out -e USERNAME=${USERNAME} -e PASSWORD=${PASSWORD} -e CREDENTIAL_ID=${CREDENTIAL_ID} -e TOTP_SECRET=${TOTP_SECRET} -e ENVIRONMENT_NAME=${ENVIRONMENT_NAME} ghcr.io/sslcom/codesigner:latest ${COMMAND} -input_file_path=/codesign/packages/<< parameters.artifact-name >> -output_dir_path=/codesign/artifacts
               docker cp codesign-out:/codesign/artifacts/<< parameters.artifact-name >> ${WORKSPACE}/artifacts/<< parameters.artifact-name >>
 
         # 6) This uploads artifacts from your workflow allowing you to share data between jobs and store data once a workflow is complete
@@ -683,7 +683,7 @@ jobs:
         - run:
             name: Docker Pull Image
             command: |
-              docker pull ghcr.io/bayrakmustafa/codesigner:latest
+              docker pull ghcr.io/sslcom/codesigner:latest
               docker pull alpine:3.4
 
         # 5) This is the step where the created DLL, JAR, EXE, MSI, PS1 (artifact) files will be signed with CodeSignTool.
@@ -693,7 +693,7 @@ jobs:
               docker create -v /codesign/packages  --name codesign-in  alpine:3.4 /bin/true
               docker create -v /codesign/artifacts --name codesign-out alpine:3.4 /bin/true
               docker cp ${WORKSPACE}/packages/<< parameters.artifact-name >> codesign-in:/codesign/packages
-              docker run -i --rm --dns 8.8.8.8 --network host --volumes-from codesign-in --volumes-from codesign-out -e USERNAME=${USERNAME} -e PASSWORD=${PASSWORD} -e CREDENTIAL_ID=${CREDENTIAL_ID} -e TOTP_SECRET=${TOTP_SECRET} -e ENVIRONMENT_NAME=${ENVIRONMENT_NAME} ghcr.io/bayrakmustafa/codesigner:latest ${COMMAND} -input_file_path=/codesign/packages/<< parameters.artifact-name >> -output_dir_path=/codesign/artifacts
+              docker run -i --rm --dns 8.8.8.8 --network host --volumes-from codesign-in --volumes-from codesign-out -e USERNAME=${USERNAME} -e PASSWORD=${PASSWORD} -e CREDENTIAL_ID=${CREDENTIAL_ID} -e TOTP_SECRET=${TOTP_SECRET} -e ENVIRONMENT_NAME=${ENVIRONMENT_NAME} ghcr.io/sslcom/codesigner:latest ${COMMAND} -input_file_path=/codesign/packages/<< parameters.artifact-name >> -output_dir_path=/codesign/artifacts
               docker cp codesign-out:/codesign/artifacts/<< parameters.artifact-name >> ${WORKSPACE}/artifacts/<< parameters.artifact-name >>
 
         # 6) This uploads artifacts from your workflow allowing you to share data between jobs and store data once a workflow is complete
@@ -849,7 +849,7 @@ jobs:
         - run:
             name: Docker Pull Image
             command: |
-              docker pull ghcr.io/bayrakmustafa/codesigner:latest
+              docker pull ghcr.io/sslcom/codesigner:latest
               docker pull alpine:3.4
 
         # 5) This is the step where the created DLL, JAR, EXE, MSI, PS1 (artifact) files will be signed with CodeSignTool.
@@ -859,7 +859,7 @@ jobs:
               docker create -v /codesign/packages  --name codesign-in  alpine:3.4 /bin/true
               docker create -v /codesign/artifacts --name codesign-out alpine:3.4 /bin/true
               docker cp ${WORKSPACE}/packages/<< parameters.artifact-name >> codesign-in:/codesign/packages
-              docker run -i --rm --dns 8.8.8.8 --network host --volumes-from codesign-in --volumes-from codesign-out -e USERNAME=${USERNAME} -e PASSWORD=${PASSWORD} -e CREDENTIAL_ID=${CREDENTIAL_ID} -e TOTP_SECRET=${TOTP_SECRET} -e ENVIRONMENT_NAME=${ENVIRONMENT_NAME} ghcr.io/bayrakmustafa/codesigner:latest ${COMMAND} -input_file_path=/codesign/packages/<< parameters.artifact-name >> -output_dir_path=/codesign/artifacts
+              docker run -i --rm --dns 8.8.8.8 --network host --volumes-from codesign-in --volumes-from codesign-out -e USERNAME=${USERNAME} -e PASSWORD=${PASSWORD} -e CREDENTIAL_ID=${CREDENTIAL_ID} -e TOTP_SECRET=${TOTP_SECRET} -e ENVIRONMENT_NAME=${ENVIRONMENT_NAME} ghcr.io/sslcom/codesigner:latest ${COMMAND} -input_file_path=/codesign/packages/<< parameters.artifact-name >> -output_dir_path=/codesign/artifacts
               docker cp codesign-out:/codesign/artifacts/<< parameters.artifact-name >> ${WORKSPACE}/artifacts/<< parameters.artifact-name >>
 
         # 6) This uploads artifacts from your workflow allowing you to share data between jobs and store data once a workflow is complete
@@ -981,7 +981,7 @@ jobs:
         - run:
             name: Docker Pull Image
             command: |
-              docker pull ghcr.io/bayrakmustafa/codesigner:latest
+              docker pull ghcr.io/sslcom/codesigner:latest
               docker pull alpine:3.4
 
         # 5) This is the step where the created DLL, JAR, EXE, MSI, PS1 (artifact) files will be signed with CodeSignTool.
@@ -991,7 +991,7 @@ jobs:
               docker create -v /codesign/packages  --name codesign-in  alpine:3.4 /bin/true
               docker create -v /codesign/artifacts --name codesign-out alpine:3.4 /bin/true
               docker cp ${WORKSPACE}/packages/<< parameters.artifact-name >> codesign-in:/codesign/packages
-              docker run -i --rm --dns 8.8.8.8 --network host --volumes-from codesign-in --volumes-from codesign-out -e USERNAME=${USERNAME} -e PASSWORD=${PASSWORD} -e CREDENTIAL_ID=${CREDENTIAL_ID} -e TOTP_SECRET=${TOTP_SECRET} -e ENVIRONMENT_NAME=${ENVIRONMENT_NAME} ghcr.io/bayrakmustafa/codesigner:latest ${COMMAND} -input_file_path=/codesign/packages/<< parameters.artifact-name >> -output_dir_path=/codesign/artifacts
+              docker run -i --rm --dns 8.8.8.8 --network host --volumes-from codesign-in --volumes-from codesign-out -e USERNAME=${USERNAME} -e PASSWORD=${PASSWORD} -e CREDENTIAL_ID=${CREDENTIAL_ID} -e TOTP_SECRET=${TOTP_SECRET} -e ENVIRONMENT_NAME=${ENVIRONMENT_NAME} ghcr.io/sslcom/codesigner:latest ${COMMAND} -input_file_path=/codesign/packages/<< parameters.artifact-name >> -output_dir_path=/codesign/artifacts
               docker cp codesign-out:/codesign/artifacts/<< parameters.artifact-name >> ${WORKSPACE}/artifacts/<< parameters.artifact-name >>
 
         # 6) This uploads artifacts from your workflow allowing you to share data between jobs and store data once a workflow is complete

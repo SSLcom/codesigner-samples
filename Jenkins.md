@@ -15,7 +15,7 @@ stage('Sign and Save Dotnet Core DLL Artifact') {
     steps {
         sh 'docker run -i --rm --dns 8.8.8.8 --network host --volume ${WORKSPACE}/packages:/codesign/examples --volume ${WORKSPACE}/artifacts:/codesign/output 
             -e USERNAME=${USERNAME} -e PASSWORD=${PASSWORD} -e CREDENTIAL_ID=${CREDENTIAL_ID} -e TOTP_SECRET=${TOTP_SECRET} -e ENVIRONMENT_NAME=${ENVIRONMENT_NAME} 
-            ghcr.io/bayrakmustafa/codesigner:latest sign -input_file_path=/codesign/examples/HelloWorld.dll -output_dir_path=/codesign/output'
+            ghcr.io/sslcom/codesigner:latest sign -input_file_path=/codesign/examples/HelloWorld.dll -output_dir_path=/codesign/output'
     }
     post {
         always {
@@ -87,7 +87,7 @@ pipeline {
         // 2) Pull Codesigner Docker Image From Github Registry
         stage('Docker Pull Image') {
             steps {
-                sh 'docker pull ghcr.io/bayrakmustafa/codesigner:latest'
+                sh 'docker pull ghcr.io/sslcom/codesigner:latest'
             }
         }
 
@@ -105,7 +105,7 @@ pipeline {
             steps {
                 sh 'docker run -i --rm --dns 8.8.8.8 --network host --volume ${WORKSPACE}/packages:/codesign/examples --volume ${WORKSPACE}/artifacts:/codesign/output 
                     -e USERNAME=${USERNAME} -e PASSWORD=${PASSWORD} -e CREDENTIAL_ID=${CREDENTIAL_ID} -e TOTP_SECRET=${TOTP_SECRET} -e ENVIRONMENT_NAME=${ENVIRONMENT_NAME} 
-                    ghcr.io/bayrakmustafa/codesigner:latest sign -input_file_path=/codesign/examples/HelloWorld.dll -output_dir_path=/codesign/output'
+                    ghcr.io/sslcom/codesigner:latest sign -input_file_path=/codesign/examples/HelloWorld.dll -output_dir_path=/codesign/output'
             }
             post {
                 always {
@@ -160,7 +160,7 @@ pipeline {
         // 2) Pull Codesigner Docker Image From Github Registry
         stage('Docker Pull Image') {
             steps {
-                sh 'docker pull ghcr.io/bayrakmustafa/codesigner:latest'
+                sh 'docker pull ghcr.io/sslcom/codesigner:latest'
             }
         }
 
@@ -178,7 +178,7 @@ pipeline {
             steps {
                 sh 'docker run -i --rm --dns 8.8.8.8 --network host --volume ${WORKSPACE}/packages:/codesign/examples --volume ${WORKSPACE}/artifacts:/codesign/output 
                     -e USERNAME=${USERNAME} -e PASSWORD=${PASSWORD} -e CREDENTIAL_ID=${CREDENTIAL_ID} -e TOTP_SECRET=${TOTP_SECRET} -e ENVIRONMENT_NAME=${ENVIRONMENT_NAME} 
-                    ghcr.io/bayrakmustafa/codesigner:latest sign -input_file_path=/codesign/examples/HelloWorld.jar -output_dir_path=/codesign/output'
+                    ghcr.io/sslcom/codesigner:latest sign -input_file_path=/codesign/examples/HelloWorld.jar -output_dir_path=/codesign/output'
             }
             post {
                 always {
@@ -232,7 +232,7 @@ pipeline {
         // 2) Pull Codesigner Docker Image From Github Registry
         stage('Docker Pull Image') {
             steps {
-                sh 'docker pull ghcr.io/bayrakmustafa/codesigner:latest'
+                sh 'docker pull ghcr.io/sslcom/codesigner:latest'
             }
         }
 
@@ -250,7 +250,7 @@ pipeline {
             steps {
                 sh 'docker run -i --rm --dns 8.8.8.8 --network host --volume ${WORKSPACE}/packages:/codesign/examples --volume ${WORKSPACE}/artifacts:/codesign/output 
                     -e USERNAME=${USERNAME} -e PASSWORD=${PASSWORD} -e CREDENTIAL_ID=${CREDENTIAL_ID} -e TOTP_SECRET=${TOTP_SECRET} -e ENVIRONMENT_NAME=${ENVIRONMENT_NAME} 
-                    ghcr.io/bayrakmustafa/codesigner:latest sign -input_file_path=/codesign/examples/HelloWorld.jar -output_dir_path=/codesign/output'
+                    ghcr.io/sslcom/codesigner:latest sign -input_file_path=/codesign/examples/HelloWorld.jar -output_dir_path=/codesign/output'
             }
             post {
                 always {
@@ -299,7 +299,7 @@ pipeline {
         // 2) Pull Codesigner Docker Image From Github Registry
         stage('Docker Pull Image') {
             steps {
-                sh 'docker pull ghcr.io/bayrakmustafa/codesigner:latest'
+                sh 'docker pull ghcr.io/sslcom/codesigner:latest'
             }
         }
 
@@ -308,7 +308,7 @@ pipeline {
             steps {
                 sh 'docker run -i --rm --dns 8.8.8.8 --network host --volume ${WORKSPACE}/packages:/codesign/examples --volume ${WORKSPACE}/artifacts:/codesign/output 
                     -e USERNAME=${USERNAME} -e PASSWORD=${PASSWORD} -e CREDENTIAL_ID=${CREDENTIAL_ID} -e TOTP_SECRET=${TOTP_SECRET} -e ENVIRONMENT_NAME=${ENVIRONMENT_NAME} 
-                    ghcr.io/bayrakmustafa/codesigner:latest sign -input_file_path=/codesign/examples/HelloWorld.ps1 -output_dir_path=/codesign/output'
+                    ghcr.io/sslcom/codesigner:latest sign -input_file_path=/codesign/examples/HelloWorld.ps1 -output_dir_path=/codesign/output'
             }
             post {
                 always {

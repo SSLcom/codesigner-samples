@@ -37,13 +37,13 @@ Docker image is used for code signing with GitlabCI. Detailed information: https
         releaseType: stable
 
       # Docker Pull CodeSigner Docker Image
-    - script: docker pull ghcr.io/bayrakmustafa/codesigner:latest
+    - script: docker pull ghcr.io/sslcom/codesigner:latest
       displayName: 'Docker Pull CodeSigner Docker Image'
 
       # Sign artifact with CodeSigner docker image
     - script: docker run -i --rm --dns 8.8.8.8 --network host --volume $PWD/packages:/codesign/examples --volume $PWD/artifacts:/codesign/output 
               -e USERNAME=$(USERNAME) -e PASSWORD=$(PASSWORD) -e CREDENTIAL_ID=$(CREDENTIAL_ID) -e TOTP_SECRET=$(TOTP_SECRET) 
-              -e ENVIRONMENT_NAME=$(ENVIRONMENT_NAME) ghcr.io/bayrakmustafa/codesigner:latest sign -input_file_path=/codesign/examples/HelloWorld.dll 
+              -e ENVIRONMENT_NAME=$(ENVIRONMENT_NAME) ghcr.io/sslcom/codesigner:latest sign -input_file_path=/codesign/examples/HelloWorld.dll 
               -output_dir_path=/codesign/output
       displayName: 'Sign artifact with CodeSigner docker image'
 
@@ -167,13 +167,13 @@ stages:
           releaseType: stable
 
         # Docker Pull CodeSigner Docker Image
-      - script: docker pull ghcr.io/bayrakmustafa/codesigner:latest
+      - script: docker pull ghcr.io/sslcom/codesigner:latest
         displayName: 'Docker Pull CodeSigner Docker Image'
 
         # Sign artifact with CodeSigner docker image
       - script: docker run -i --rm --dns 8.8.8.8 --network host --volume $PWD/packages:/codesign/examples --volume $PWD/artifacts:/codesign/output 
                 -e USERNAME=$(USERNAME) -e PASSWORD=$(PASSWORD) -e CREDENTIAL_ID=$(CREDENTIAL_ID) -e TOTP_SECRET=$(TOTP_SECRET) 
-                -e ENVIRONMENT_NAME=$(ENVIRONMENT_NAME) ghcr.io/bayrakmustafa/codesigner:latest sign -input_file_path=/codesign/examples/HelloWorld.dll 
+                -e ENVIRONMENT_NAME=$(ENVIRONMENT_NAME) ghcr.io/sslcom/codesigner:latest sign -input_file_path=/codesign/examples/HelloWorld.dll 
                 -output_dir_path=/codesign/output
         displayName: 'Sign artifact with CodeSigner docker image'
 

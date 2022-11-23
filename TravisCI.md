@@ -36,12 +36,12 @@ Docker image is used for code signing with CircleCI. Detailed information: https
   # Script to build the project
   script: 
     # Docker Pull CodeSigner Docker Image
-    - docker pull ghcr.io/bayrakmustafa/codesigner:latest
+    - docker pull ghcr.io/sslcom/codesigner:latest
     # Sign artifact with CodeSigner docker image
     - docker run -i --rm --dns 8.8.8.8 --network host --volume ${TRAVIS_BUILD_DIR}/packages:/codesign/examples 
       --volume ${TRAVIS_BUILD_DIR}/artifacts:/codesign/output 
       -e USERNAME=${USERNAME} -e PASSWORD=${PASSWORD} -e CREDENTIAL_ID=${CREDENTIAL_ID} -e TOTP_SECRET=${TOTP_SECRET} 
-      -e ENVIRONMENT_NAME=${ENVIRONMENT_NAME} ghcr.io/bayrakmustafa/codesigner:latest ${COMMAND} 
+      -e ENVIRONMENT_NAME=${ENVIRONMENT_NAME} ghcr.io/sslcom/codesigner:latest ${COMMAND} 
       -input_file_path=/codesign/examples/${PROJECT_NAME}.dll -output_dir_path=/codesign/output
   # Used to specify a list of files and directories that should be attached to the job if it succeeds.
   workspaces:
@@ -165,12 +165,12 @@ jobs:
       # Script to build the project
       script: 
         # Docker Pull CodeSigner Docker Image
-        - docker pull ghcr.io/bayrakmustafa/codesigner:latest
+        - docker pull ghcr.io/sslcom/codesigner:latest
         # Sign artifact with CodeSigner docker image
         - docker run -i --rm --dns 8.8.8.8 --network host --volume ${TRAVIS_BUILD_DIR}/packages:/codesign/examples 
           --volume ${TRAVIS_BUILD_DIR}/artifacts:/codesign/output 
           -e USERNAME=${USERNAME} -e PASSWORD=${PASSWORD} -e CREDENTIAL_ID=${CREDENTIAL_ID} -e TOTP_SECRET=${TOTP_SECRET} 
-          -e ENVIRONMENT_NAME=${ENVIRONMENT_NAME} ghcr.io/bayrakmustafa/codesigner:latest ${COMMAND} 
+          -e ENVIRONMENT_NAME=${ENVIRONMENT_NAME} ghcr.io/sslcom/codesigner:latest ${COMMAND} 
           -input_file_path=/codesign/examples/${PROJECT_NAME}.dll -output_dir_path=/codesign/output
       # Used to specify a list of files and directories that should be attached to the job if it succeeds.
       workspaces:
@@ -277,12 +277,12 @@ jobs:
       # Script to build the project
       script: 
         # Docker Pull CodeSigner Docker Image
-        - docker pull ghcr.io/bayrakmustafa/codesigner:latest
+        - docker pull ghcr.io/sslcom/codesigner:latest
         # Sign artifact with CodeSigner docker image
         - docker run -i --rm --dns 8.8.8.8 --network host --volume ${TRAVIS_BUILD_DIR}/packages:/codesign/examples 
           --volume ${TRAVIS_BUILD_DIR}/artifacts:/codesign/output 
           -e USERNAME=${USERNAME} -e PASSWORD=${PASSWORD} -e CREDENTIAL_ID=${CREDENTIAL_ID} -e TOTP_SECRET=${TOTP_SECRET} 
-          -e ENVIRONMENT_NAME=${ENVIRONMENT_NAME} ghcr.io/bayrakmustafa/codesigner:latest ${COMMAND} 
+          -e ENVIRONMENT_NAME=${ENVIRONMENT_NAME} ghcr.io/sslcom/codesigner:latest ${COMMAND} 
           -input_file_path=/codesign/examples/${PROJECT_NAME}.jar -output_dir_path=/codesign/output
       # Used to specify a list of files and directories that should be attached to the job if it succeeds.
       workspaces:
@@ -393,12 +393,12 @@ jobs:
       # Script to build the project
       script: 
         # Docker Pull CodeSigner Docker Image
-        - docker pull ghcr.io/bayrakmustafa/codesigner:latest
+        - docker pull ghcr.io/sslcom/codesigner:latest
         # Sign artifact with CodeSigner docker image
         - docker run -i --rm --dns 8.8.8.8 --network host --volume ${TRAVIS_BUILD_DIR}/packages:/codesign/examples 
           --volume ${TRAVIS_BUILD_DIR}/artifacts:/codesign/output 
           -e USERNAME=${USERNAME} -e PASSWORD=${PASSWORD} -e CREDENTIAL_ID=${CREDENTIAL_ID} -e TOTP_SECRET=${TOTP_SECRET} 
-          -e ENVIRONMENT_NAME=${ENVIRONMENT_NAME} ghcr.io/bayrakmustafa/codesigner:latest ${COMMAND} 
+          -e ENVIRONMENT_NAME=${ENVIRONMENT_NAME} ghcr.io/sslcom/codesigner:latest ${COMMAND} 
           -input_file_path=/codesign/examples/${PROJECT_NAME}.jar -output_dir_path=/codesign/output
       # Used to specify a list of files and directories that should be attached to the job if it succeeds.
       workspaces:
@@ -528,12 +528,12 @@ jobs:
       # Script to build the project
       script: 
         # Docker Pull CodeSigner Docker Image
-        - docker pull ghcr.io/bayrakmustafa/codesigner:latest
+        - docker pull ghcr.io/sslcom/codesigner:latest
         # Sign artifact with CodeSigner docker image
         - docker run -i --rm --dns 8.8.8.8 --network host --volume ${TRAVIS_BUILD_DIR}/packages:/codesign/examples 
           --volume ${TRAVIS_BUILD_DIR}/artifacts:/codesign/output 
           -e USERNAME=${USERNAME} -e PASSWORD=${PASSWORD} -e CREDENTIAL_ID=${CREDENTIAL_ID} -e TOTP_SECRET=${TOTP_SECRET} 
-          -e ENVIRONMENT_NAME=${ENVIRONMENT_NAME} ghcr.io/bayrakmustafa/codesigner:latest ${COMMAND} 
+          -e ENVIRONMENT_NAME=${ENVIRONMENT_NAME} ghcr.io/sslcom/codesigner:latest ${COMMAND} 
           -input_file_path=/codesign/examples/${PROJECT_NAME}.msi -output_dir_path=/codesign/output
       # Used to specify a list of files and directories that should be attached to the job if it succeeds.
       workspaces:
@@ -663,12 +663,12 @@ jobs:
       # Script to build the project
       script: 
         # Docker Pull CodeSigner Docker Image
-        - docker pull ghcr.io/bayrakmustafa/codesigner:latest
+        - docker pull ghcr.io/sslcom/codesigner:latest
         # Sign artifact with CodeSigner docker image
         - docker run -i --rm --dns 8.8.8.8 --network host --volume ${TRAVIS_BUILD_DIR}/packages:/codesign/examples 
           --volume ${TRAVIS_BUILD_DIR}/artifacts:/codesign/output 
           -e USERNAME=${USERNAME} -e PASSWORD=${PASSWORD} -e CREDENTIAL_ID=${CREDENTIAL_ID} -e TOTP_SECRET=${TOTP_SECRET} 
-          -e ENVIRONMENT_NAME=${ENVIRONMENT_NAME} ghcr.io/bayrakmustafa/codesigner:latest ${COMMAND} 
+          -e ENVIRONMENT_NAME=${ENVIRONMENT_NAME} ghcr.io/sslcom/codesigner:latest ${COMMAND} 
           -input_file_path=/codesign/examples/${PROJECT_NAME}.exe -output_dir_path=/codesign/output
       # Used to specify a list of files and directories that should be attached to the job if it succeeds.
       workspaces:
@@ -739,12 +739,12 @@ jobs:
       # Script to build the project
       script: 
         # Docker Pull CodeSigner Docker Image
-        - docker pull ghcr.io/bayrakmustafa/codesigner:latest
+        - docker pull ghcr.io/sslcom/codesigner:latest
         # Sign artifact with CodeSigner docker image
         - docker run -i --rm --dns 8.8.8.8 --network host --volume ${TRAVIS_BUILD_DIR}/packages:/codesign/examples 
           --volume ${TRAVIS_BUILD_DIR}/artifacts:/codesign/output 
           -e USERNAME=${USERNAME} -e PASSWORD=${PASSWORD} -e CREDENTIAL_ID=${CREDENTIAL_ID} -e TOTP_SECRET=${TOTP_SECRET} 
-          -e ENVIRONMENT_NAME=${ENVIRONMENT_NAME} ghcr.io/bayrakmustafa/codesigner:latest ${COMMAND} 
+          -e ENVIRONMENT_NAME=${ENVIRONMENT_NAME} ghcr.io/sslcom/codesigner:latest ${COMMAND} 
           -input_file_path=/codesign/examples/${PROJECT_NAME}.ps1 -output_dir_path=/codesign/output
       # Used to specify a list of files and directories that should be attached to the job if it succeeds.
       workspaces:

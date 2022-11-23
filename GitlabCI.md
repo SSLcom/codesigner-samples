@@ -29,10 +29,10 @@ sign-dotnet-artifacts:
     - mkdir -p ${CI_PROJECT_DIR}/packages
   # Shell scripts executed by the Runner. Sign dotnet dll artifact with CodeSignTool Docker Image
   script:
-    - docker pull ghcr.io/bayrakmustafa/codesigner:latest
+    - docker pull ghcr.io/sslcom/codesigner:latest
     - docker run -i --rm --dns 8.8.8.8 --network host --volume ${CI_PROJECT_DIR}/packages:/codesign/examples --volume ${CI_PROJECT_DIR}/artifacts:/codesign/output 
         -e USERNAME=${USERNAME} -e PASSWORD=${PASSWORD} -e CREDENTIAL_ID=${CREDENTIAL_ID} -e TOTP_SECRET=${TOTP_SECRET} 
-        -e ENVIRONMENT_NAME=${ENVIRONMENT_NAME} ghcr.io/bayrakmustafa/codesigner:latest ${COMMAND} 
+        -e ENVIRONMENT_NAME=${ENVIRONMENT_NAME} ghcr.io/sslcom/codesigner:latest ${COMMAND} 
         -input_file_path=/codesign/examples/${PROJECT_NAME}.dll -output_dir_path=/codesign/output
   # Used to specify a list of files and directories that should be attached to the job if it succeeds.
   artifacts:
@@ -119,8 +119,8 @@ sign-dotnet-artifacts:
     - mkdir -p ${CI_PROJECT_DIR}/packages
   # Shell scripts executed by the Runner. Sign dotnet dll artifact with CodeSignTool Docker Image
   script:
-    - docker pull ghcr.io/bayrakmustafa/codesigner:latest
-    - docker run -i --rm --dns 8.8.8.8 --network host --volume ${CI_PROJECT_DIR}/packages:/codesign/examples --volume ${CI_PROJECT_DIR}/artifacts:/codesign/output -e USERNAME=${USERNAME} -e PASSWORD=${PASSWORD} -e CREDENTIAL_ID=${CREDENTIAL_ID} -e TOTP_SECRET=${TOTP_SECRET} -e ENVIRONMENT_NAME=${ENVIRONMENT_NAME} ghcr.io/bayrakmustafa/codesigner:latest ${COMMAND} -input_file_path=/codesign/examples/${PROJECT_NAME}.dll -output_dir_path=/codesign/output
+    - docker pull ghcr.io/sslcom/codesigner:latest
+    - docker run -i --rm --dns 8.8.8.8 --network host --volume ${CI_PROJECT_DIR}/packages:/codesign/examples --volume ${CI_PROJECT_DIR}/artifacts:/codesign/output -e USERNAME=${USERNAME} -e PASSWORD=${PASSWORD} -e CREDENTIAL_ID=${CREDENTIAL_ID} -e TOTP_SECRET=${TOTP_SECRET} -e ENVIRONMENT_NAME=${ENVIRONMENT_NAME} ghcr.io/sslcom/codesigner:latest ${COMMAND} -input_file_path=/codesign/examples/${PROJECT_NAME}.dll -output_dir_path=/codesign/output
   # Used to specify a list of files and directories that should be attached to the job if it succeeds.
   artifacts:
     paths:
@@ -190,8 +190,8 @@ sign-maven-artifacts:
     - cp ${CI_PROJECT_DIR}/packages/${PROJECT_NAME}.jar ${CI_PROJECT_DIR}/packages/${PROJECT_NAME}-Maven.jar
   # Shell scripts executed by the Runner. Sign dotnet jar artifact with CodeSignTool Docker Image
   script:
-    - docker pull ghcr.io/bayrakmustafa/codesigner:latest
-    - docker run -i --rm --dns 8.8.8.8 --network host --volume ${CI_PROJECT_DIR}/packages:/codesign/examples --volume ${CI_PROJECT_DIR}/artifacts:/codesign/output -e USERNAME=${USERNAME} -e PASSWORD=${PASSWORD} -e CREDENTIAL_ID=${CREDENTIAL_ID} -e TOTP_SECRET=${TOTP_SECRET} -e ENVIRONMENT_NAME=${ENVIRONMENT_NAME} ghcr.io/bayrakmustafa/codesigner:latest ${COMMAND} -input_file_path=/codesign/examples/${PROJECT_NAME}-Maven.jar -output_dir_path=/codesign/output
+    - docker pull ghcr.io/sslcom/codesigner:latest
+    - docker run -i --rm --dns 8.8.8.8 --network host --volume ${CI_PROJECT_DIR}/packages:/codesign/examples --volume ${CI_PROJECT_DIR}/artifacts:/codesign/output -e USERNAME=${USERNAME} -e PASSWORD=${PASSWORD} -e CREDENTIAL_ID=${CREDENTIAL_ID} -e TOTP_SECRET=${TOTP_SECRET} -e ENVIRONMENT_NAME=${ENVIRONMENT_NAME} ghcr.io/sslcom/codesigner:latest ${COMMAND} -input_file_path=/codesign/examples/${PROJECT_NAME}-Maven.jar -output_dir_path=/codesign/output
   # Used to specify a list of files and directories that should be attached to the job if it succeeds.
   artifacts:
     paths:
@@ -262,8 +262,8 @@ sign-gradle-artifacts:
     - cp ${CI_PROJECT_DIR}/packages/${PROJECT_NAME}.jar ${CI_PROJECT_DIR}/packages/${PROJECT_NAME}-Gradle.jar
   # Shell scripts executed by the Runner. Sign dotnet jar artifact with CodeSignTool Docker Image
   script:
-    - docker pull ghcr.io/bayrakmustafa/codesigner:latest
-    - docker run -i --rm --dns 8.8.8.8 --network host --volume ${CI_PROJECT_DIR}/packages:/codesign/examples --volume ${CI_PROJECT_DIR}/artifacts:/codesign/output -e USERNAME=${USERNAME} -e PASSWORD=${PASSWORD} -e CREDENTIAL_ID=${CREDENTIAL_ID} -e TOTP_SECRET=${TOTP_SECRET} -e ENVIRONMENT_NAME=${ENVIRONMENT_NAME} ghcr.io/bayrakmustafa/codesigner:latest ${COMMAND} -input_file_path=/codesign/examples/${PROJECT_NAME}-Gradle.jar -output_dir_path=/codesign/output
+    - docker pull ghcr.io/sslcom/codesigner:latest
+    - docker run -i --rm --dns 8.8.8.8 --network host --volume ${CI_PROJECT_DIR}/packages:/codesign/examples --volume ${CI_PROJECT_DIR}/artifacts:/codesign/output -e USERNAME=${USERNAME} -e PASSWORD=${PASSWORD} -e CREDENTIAL_ID=${CREDENTIAL_ID} -e TOTP_SECRET=${TOTP_SECRET} -e ENVIRONMENT_NAME=${ENVIRONMENT_NAME} ghcr.io/sslcom/codesigner:latest ${COMMAND} -input_file_path=/codesign/examples/${PROJECT_NAME}-Gradle.jar -output_dir_path=/codesign/output
   # Used to specify a list of files and directories that should be attached to the job if it succeeds.
   artifacts:
     paths:
@@ -349,8 +349,8 @@ sign-gradle-msi-artifacts:
     - mkdir -p ${CI_PROJECT_DIR}/packages
   # Shell scripts executed by the Runner. Sign dotnet msi artifact with CodeSignTool Docker Image
   script:
-    - docker pull ghcr.io/bayrakmustafa/codesigner:latest
-    - docker run -i --rm --dns 8.8.8.8 --network host --volume ${CI_PROJECT_DIR}/packages:/codesign/examples --volume ${CI_PROJECT_DIR}/artifacts:/codesign/output -e USERNAME=${USERNAME} -e PASSWORD=${PASSWORD} -e CREDENTIAL_ID=${CREDENTIAL_ID} -e TOTP_SECRET=${TOTP_SECRET} -e ENVIRONMENT_NAME=${ENVIRONMENT_NAME} ghcr.io/bayrakmustafa/codesigner:latest ${COMMAND} -input_file_path=/codesign/examples/${PROJECT_NAME}.msi -output_dir_path=/codesign/output
+    - docker pull ghcr.io/sslcom/codesigner:latest
+    - docker run -i --rm --dns 8.8.8.8 --network host --volume ${CI_PROJECT_DIR}/packages:/codesign/examples --volume ${CI_PROJECT_DIR}/artifacts:/codesign/output -e USERNAME=${USERNAME} -e PASSWORD=${PASSWORD} -e CREDENTIAL_ID=${CREDENTIAL_ID} -e TOTP_SECRET=${TOTP_SECRET} -e ENVIRONMENT_NAME=${ENVIRONMENT_NAME} ghcr.io/sslcom/codesigner:latest ${COMMAND} -input_file_path=/codesign/examples/${PROJECT_NAME}.msi -output_dir_path=/codesign/output
   # Used to specify a list of files and directories that should be attached to the job if it succeeds.
   artifacts:
     paths:
@@ -436,8 +436,8 @@ sign-gradle-exe-artifacts:
     - mkdir -p ${CI_PROJECT_DIR}/packages
   # Shell scripts executed by the Runner. Sign dotnet exe artifact with CodeSignTool Docker Image
   script:
-    - docker pull ghcr.io/bayrakmustafa/codesigner:latest
-    - docker run -i --rm --dns 8.8.8.8 --network host --volume ${CI_PROJECT_DIR}/packages:/codesign/examples --volume ${CI_PROJECT_DIR}/artifacts:/codesign/output -e USERNAME=${USERNAME} -e PASSWORD=${PASSWORD} -e CREDENTIAL_ID=${CREDENTIAL_ID} -e TOTP_SECRET=${TOTP_SECRET} -e ENVIRONMENT_NAME=${ENVIRONMENT_NAME} ghcr.io/bayrakmustafa/codesigner:latest ${COMMAND} -input_file_path=/codesign/examples/${PROJECT_NAME}.exe -output_dir_path=/codesign/output
+    - docker pull ghcr.io/sslcom/codesigner:latest
+    - docker run -i --rm --dns 8.8.8.8 --network host --volume ${CI_PROJECT_DIR}/packages:/codesign/examples --volume ${CI_PROJECT_DIR}/artifacts:/codesign/output -e USERNAME=${USERNAME} -e PASSWORD=${PASSWORD} -e CREDENTIAL_ID=${CREDENTIAL_ID} -e TOTP_SECRET=${TOTP_SECRET} -e ENVIRONMENT_NAME=${ENVIRONMENT_NAME} ghcr.io/sslcom/codesigner:latest ${COMMAND} -input_file_path=/codesign/examples/${PROJECT_NAME}.exe -output_dir_path=/codesign/output
   # Used to specify a list of files and directories that should be attached to the job if it succeeds.
   artifacts:
     paths:
@@ -482,8 +482,8 @@ sign-ps1-artifacts:
     - cp powershell/${PROJECT_NAME}.ps1 ${CI_PROJECT_DIR}/packages/${PROJECT_NAME}.ps1
   # Shell scripts executed by the Runner. Sign dotnet ps1 artifact with CodeSignTool Docker Image
   script:
-    - docker pull ghcr.io/bayrakmustafa/codesigner:latest
-    - docker run -i --rm --dns 8.8.8.8 --network host --volume ${CI_PROJECT_DIR}/packages:/codesign/examples --volume ${CI_PROJECT_DIR}/artifacts:/codesign/output -e USERNAME=${USERNAME} -e PASSWORD=${PASSWORD} -e CREDENTIAL_ID=${CREDENTIAL_ID} -e TOTP_SECRET=${TOTP_SECRET} -e ENVIRONMENT_NAME=${ENVIRONMENT_NAME} ghcr.io/bayrakmustafa/codesigner:latest ${COMMAND} -input_file_path=/codesign/examples/${PROJECT_NAME}.ps1 -output_dir_path=/codesign/output
+    - docker pull ghcr.io/sslcom/codesigner:latest
+    - docker run -i --rm --dns 8.8.8.8 --network host --volume ${CI_PROJECT_DIR}/packages:/codesign/examples --volume ${CI_PROJECT_DIR}/artifacts:/codesign/output -e USERNAME=${USERNAME} -e PASSWORD=${PASSWORD} -e CREDENTIAL_ID=${CREDENTIAL_ID} -e TOTP_SECRET=${TOTP_SECRET} -e ENVIRONMENT_NAME=${ENVIRONMENT_NAME} ghcr.io/sslcom/codesigner:latest ${COMMAND} -input_file_path=/codesign/examples/${PROJECT_NAME}.ps1 -output_dir_path=/codesign/output
   # Used to specify a list of files and directories that should be attached to the job if it succeeds.
   artifacts:
     paths:

@@ -21,9 +21,9 @@ Docker image is used for code signing with GitlabCI. Detailed information: https
       # Fixed dotnet permission issue
       - chmod -R 777 ${BITBUCKET_CLONE_DIR}/packages
       # Docker Pull CodeSigner Docker Image
-      - docker pull ghcr.io/bayrakmustafa/codesigner:latest
+      - docker pull ghcr.io/sslcom/codesigner:latest
       # Sign artifact with CodeSigner docker image
-      - docker run -i --rm --dns 8.8.8.8 --volume ${BITBUCKET_CLONE_DIR}/packages:/codesign/examples --volume ${BITBUCKET_CLONE_DIR}/artifacts:/codesign/output -e USERNAME=${USERNAME} -e PASSWORD=${PASSWORD} -e CREDENTIAL_ID=${CREDENTIAL_ID} -e TOTP_SECRET=${TOTP_SECRET} -e ENVIRONMENT_NAME=${ENVIRONMENT_NAME} ghcr.io/bayrakmustafa/codesigner:latest sign -input_file_path=/codesign/examples/HelloWorld.dll -output_dir_path=/codesign/output
+      - docker run -i --rm --dns 8.8.8.8 --volume ${BITBUCKET_CLONE_DIR}/packages:/codesign/examples --volume ${BITBUCKET_CLONE_DIR}/artifacts:/codesign/output -e USERNAME=${USERNAME} -e PASSWORD=${PASSWORD} -e CREDENTIAL_ID=${CREDENTIAL_ID} -e TOTP_SECRET=${TOTP_SECRET} -e ENVIRONMENT_NAME=${ENVIRONMENT_NAME} ghcr.io/sslcom/codesigner:latest sign -input_file_path=/codesign/examples/HelloWorld.dll -output_dir_path=/codesign/output
 ```
 <!-- end usage -->
 
@@ -84,9 +84,9 @@ pipelines:
           # Fixed dotnet permission issue
           - chmod -R 777 ${BITBUCKET_CLONE_DIR}/packages
           # Docker Pull CodeSigner Docker Image
-          - docker pull ghcr.io/bayrakmustafa/codesigner:latest
+          - docker pull ghcr.io/sslcom/codesigner:latest
           # Sign artifact with CodeSigner docker image
-          - docker run -i --rm --dns 8.8.8.8 --volume ${BITBUCKET_CLONE_DIR}/packages:/codesign/examples --volume ${BITBUCKET_CLONE_DIR}/artifacts:/codesign/output -e USERNAME=${USERNAME} -e PASSWORD=${PASSWORD} -e CREDENTIAL_ID=${CREDENTIAL_ID} -e TOTP_SECRET=${TOTP_SECRET} -e ENVIRONMENT_NAME=${ENVIRONMENT_NAME} ghcr.io/bayrakmustafa/codesigner:latest sign -input_file_path=/codesign/examples/HelloWorld.dll -output_dir_path=/codesign/output
+          - docker run -i --rm --dns 8.8.8.8 --volume ${BITBUCKET_CLONE_DIR}/packages:/codesign/examples --volume ${BITBUCKET_CLONE_DIR}/artifacts:/codesign/output -e USERNAME=${USERNAME} -e PASSWORD=${PASSWORD} -e CREDENTIAL_ID=${CREDENTIAL_ID} -e TOTP_SECRET=${TOTP_SECRET} -e ENVIRONMENT_NAME=${ENVIRONMENT_NAME} ghcr.io/sslcom/codesigner:latest sign -input_file_path=/codesign/examples/HelloWorld.dll -output_dir_path=/codesign/output
 ```
 <!-- end dotnet usage -->
 
@@ -128,9 +128,9 @@ pipelines:
           - mkdir -p ${BITBUCKET_CLONE_DIR}/artifacts
           - mkdir -p ${BITBUCKET_CLONE_DIR}/packages
           # Docker Pull CodeSigner Docker Image
-          - docker pull ghcr.io/bayrakmustafa/codesigner:latest
+          - docker pull ghcr.io/sslcom/codesigner:latest
           # Sign artifact with CodeSigner docker image
-          - docker run -i --rm --dns 8.8.8.8 --volume ${BITBUCKET_CLONE_DIR}/packages:/codesign/examples --volume ${BITBUCKET_CLONE_DIR}/artifacts:/codesign/output -e USERNAME=${USERNAME} -e PASSWORD=${PASSWORD} -e CREDENTIAL_ID=${CREDENTIAL_ID} -e TOTP_SECRET=${TOTP_SECRET} -e ENVIRONMENT_NAME=${ENVIRONMENT_NAME} ghcr.io/bayrakmustafa/codesigner:latest sign -input_file_path=/codesign/examples/HelloWorld-Maven.jar -output_dir_path=/codesign/output
+          - docker run -i --rm --dns 8.8.8.8 --volume ${BITBUCKET_CLONE_DIR}/packages:/codesign/examples --volume ${BITBUCKET_CLONE_DIR}/artifacts:/codesign/output -e USERNAME=${USERNAME} -e PASSWORD=${PASSWORD} -e CREDENTIAL_ID=${CREDENTIAL_ID} -e TOTP_SECRET=${TOTP_SECRET} -e ENVIRONMENT_NAME=${ENVIRONMENT_NAME} ghcr.io/sslcom/codesigner:latest sign -input_file_path=/codesign/examples/HelloWorld-Maven.jar -output_dir_path=/codesign/output
 ```
 <!-- end maven usage -->
 
@@ -177,9 +177,9 @@ pipelines:
           - mkdir -p ${BITBUCKET_CLONE_DIR}/artifacts
           - mkdir -p ${BITBUCKET_CLONE_DIR}/packages
           # Docker Pull CodeSigner Docker Image
-          - docker pull ghcr.io/bayrakmustafa/codesigner:latest
+          - docker pull ghcr.io/sslcom/codesigner:latest
           # Sign artifact with CodeSigner docker image
-          - docker run -i --rm --dns 8.8.8.8 --volume ${BITBUCKET_CLONE_DIR}/packages:/codesign/examples --volume ${BITBUCKET_CLONE_DIR}/artifacts:/codesign/output -e USERNAME=${USERNAME} -e PASSWORD=${PASSWORD} -e CREDENTIAL_ID=${CREDENTIAL_ID} -e TOTP_SECRET=${TOTP_SECRET} -e ENVIRONMENT_NAME=${ENVIRONMENT_NAME} ghcr.io/bayrakmustafa/codesigner:latest sign -input_file_path=/codesign/examples/HelloWorld-Gradle.jar -output_dir_path=/codesign/output
+          - docker run -i --rm --dns 8.8.8.8 --volume ${BITBUCKET_CLONE_DIR}/packages:/codesign/examples --volume ${BITBUCKET_CLONE_DIR}/artifacts:/codesign/output -e USERNAME=${USERNAME} -e PASSWORD=${PASSWORD} -e CREDENTIAL_ID=${CREDENTIAL_ID} -e TOTP_SECRET=${TOTP_SECRET} -e ENVIRONMENT_NAME=${ENVIRONMENT_NAME} ghcr.io/sslcom/codesigner:latest sign -input_file_path=/codesign/examples/HelloWorld-Gradle.jar -output_dir_path=/codesign/output
 ```
 <!-- end gradle usage -->
 
@@ -202,9 +202,9 @@ pipelines:
           # Copy ps1 script for signing
           - cp powershell/HelloWorld.ps1 ${BITBUCKET_CLONE_DIR}/packages/HelloWorld.ps1
           # Docker Pull CodeSigner Docker Image
-          - docker pull ghcr.io/bayrakmustafa/codesigner:latest
+          - docker pull ghcr.io/sslcom/codesigner:latest
           # Sign artifact with CodeSigner docker image
-          - docker run -i --rm --dns 8.8.8.8 --volume ${BITBUCKET_CLONE_DIR}/packages:/codesign/examples --volume ${BITBUCKET_CLONE_DIR}/artifacts:/codesign/output -e USERNAME=${USERNAME} -e PASSWORD=${PASSWORD} -e CREDENTIAL_ID=${CREDENTIAL_ID} -e TOTP_SECRET=${TOTP_SECRET} -e ENVIRONMENT_NAME=${ENVIRONMENT_NAME} ghcr.io/bayrakmustafa/codesigner:latest sign -input_file_path=/codesign/examples/HelloWorld.ps1 -output_dir_path=/codesign/output
+          - docker run -i --rm --dns 8.8.8.8 --volume ${BITBUCKET_CLONE_DIR}/packages:/codesign/examples --volume ${BITBUCKET_CLONE_DIR}/artifacts:/codesign/output -e USERNAME=${USERNAME} -e PASSWORD=${PASSWORD} -e CREDENTIAL_ID=${CREDENTIAL_ID} -e TOTP_SECRET=${TOTP_SECRET} -e ENVIRONMENT_NAME=${ENVIRONMENT_NAME} ghcr.io/sslcom/codesigner:latest sign -input_file_path=/codesign/examples/HelloWorld.ps1 -output_dir_path=/codesign/output
 ```
 <!-- end powershell usage -->
 
