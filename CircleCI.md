@@ -1,11 +1,11 @@
 # Sign with CodeSignTool
 
-[![GitHub Actions Docker Status](https://github.com/bayrakmustafa/codesigner-docker/workflows/Docker%20Image%20CI/badge.svg)](https://github.com/bayrakmustafa/codesigner-docker)
-[![CircleCI](https://circleci.com/gh/bayrakmustafa/codesigner-samples/tree/main.svg?style=shield)](https://circleci.com/gh/bayrakmustafa/codesigner-samples/tree/main)
+[![GitHub Actions Docker Status](https://github.com/sslcom/ci-images/workflows/Docker%20Image%20CI/badge.svg)](https://github.com/sslcom/ci-images)
+[![CircleCI](https://circleci.com/gh/sslcom/codesigner-samples/tree/main.svg?style=shield)](https://circleci.com/gh/sslcom/codesigner-samples/tree/main)
 
 CodeSignTool is a secure, privacy-oriented multi-platform Java command line utility for remotely signing Microsoft Authenticode and Java code objects with eSigner EV code signing certificates. Hashes of the files are sent to SSL.com for signing so that the code itself is not sent. This is ideal where sensitive files need to be signed, but should not be sent over the wire for signing. CodeSignTool is also ideal for automated batch processes for high volume signings or integration into existing CI/CD pipeline workflows.
 
-Docker image is used for code signing with CircleCI. Detailed information: https://github.com/bayrakmustafa/codesigner-docker
+Docker image is used for code signing with CircleCI. Detailed information: https://github.com/sslcom/ci-images
 
 # Usage (Job)
 
@@ -14,7 +14,7 @@ Docker image is used for code signing with CircleCI. Detailed information: https
 codesigner-sign-artifact:
     # Create an environment variable
     environment:
-        REGISTRY_USERNAME: bayrakmustafa
+        REGISTRY_USERNAME: sslcom
         ENVIRONMENT_NAME: TEST # TEST, PROD
         COMMAND: sign
         WORKSPACE: /home/circleci/project
@@ -180,7 +180,7 @@ jobs:
   codesigner-sign-artifact:
       # Create an environment variable
       environment:
-          REGISTRY_USERNAME: bayrakmustafa
+          REGISTRY_USERNAME: sslcom
           ENVIRONMENT_NAME: TEST
           COMMAND: sign
           WORKSPACE: /home/circleci/project
@@ -323,7 +323,7 @@ jobs:
   codesigner-sign-artifact:
       # Create an environment variable
       environment:
-          REGISTRY_USERNAME: bayrakmustafa
+          REGISTRY_USERNAME: sslcom
           ENVIRONMENT_NAME: TEST
           COMMAND: sign
           WORKSPACE: /home/circleci/project
@@ -472,7 +472,7 @@ jobs:
   codesigner-sign-artifact:
       # Create an environment variable
       environment:
-          REGISTRY_USERNAME: bayrakmustafa
+          REGISTRY_USERNAME: sslcom
           ENVIRONMENT_NAME: TEST
           COMMAND: sign
           WORKSPACE: /home/circleci/project
@@ -638,7 +638,7 @@ jobs:
   codesigner-sign-artifact:
       # Create an environment variable
       environment:
-          REGISTRY_USERNAME: bayrakmustafa
+          REGISTRY_USERNAME: sslcom
           ENVIRONMENT_NAME: TEST
           COMMAND: sign
           WORKSPACE: /home/circleci/project
@@ -804,7 +804,7 @@ jobs:
   codesigner-sign-artifact:
       # Create an environment variable
       environment:
-          REGISTRY_USERNAME: bayrakmustafa
+          REGISTRY_USERNAME: sslcom
           ENVIRONMENT_NAME: TEST
           COMMAND: sign
           WORKSPACE: /home/circleci/project
@@ -936,7 +936,7 @@ jobs:
   codesigner-sign-artifact:
       # Create an environment variable
       environment:
-          REGISTRY_USERNAME: bayrakmustafa
+          REGISTRY_USERNAME: sslcom
           ENVIRONMENT_NAME: TEST
           COMMAND: sign
           WORKSPACE: /home/circleci/project

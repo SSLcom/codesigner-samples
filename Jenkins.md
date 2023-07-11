@@ -1,11 +1,11 @@
 # Sign with CodeSignTool
 
-[![GitHub Actions Docker Status](https://github.com/bayrakmustafa/codesigner-docker/workflows/Docker%20Image%20CI/badge.svg)](https://github.com/bayrakmustafa/codesigner-docker)
-[![Build Status](https://img.shields.io/travis/bayrakmustafa/codesigner-samples.svg?style=plastic&label=Travis%20CI&branch=main)](https://app.travis-ci.com/bayrakmustafa/codesigner-samples)
+[![GitHub Actions Docker Status](https://github.com/sslcom/ci-images/workflows/Docker%20Image%20CI/badge.svg)](https://github.com/sslcom/ci-images)
+[![Build Status](https://img.shields.io/travis/sslcom/codesigner-samples.svg?style=plastic&label=Travis%20CI&branch=main)](https://app.travis-ci.com/sslcom/codesigner-samples)
 
 CodeSignTool is a secure, privacy-oriented multi-platform Java command line utility for remotely signing Microsoft Authenticode and Java code objects with eSigner EV code signing certificates. Hashes of the files are sent to SSL.com for signing so that the code itself is not sent. This is ideal where sensitive files need to be signed, but should not be sent over the wire for signing. CodeSignTool is also ideal for automated batch processes for high volume signings or integration into existing CI/CD pipeline workflows.
 
-Docker image is used for code signing with CircleCI. Detailed information: https://github.com/bayrakmustafa/codesigner-docker
+Docker image is used for code signing with CircleCI. Detailed information: https://github.com/sslcom/ci-images
 
 # Usage (Job)
 
@@ -71,7 +71,7 @@ pipeline {
         TOTP_SECRET       = credentials('es-totp-secret')    // OAuth TOTP Secret (https://www.ssl.com/how-to/automate-esigner-ev-code-signing)
         
         REGISTRY_PASSWORD = credentials('es-github-token')   // Github Token for Pull codesigner Docker Image
-        REGISTRY_USERNAME = 'bayrakmustafa'                  // Github Registry Username for Pull codesigner Docker Image
+        REGISTRY_USERNAME = 'sslcom'                  // Github Registry Username for Pull codesigner Docker Image
         ENVIRONMENT_NAME  = 'TEST'                           // SSL.com Environment Name. For Demo Account It can be 'TEST' otherwise it will be 'PROD'
     }
 
@@ -144,7 +144,7 @@ pipeline {
         TOTP_SECRET       = credentials('es-totp-secret')    // OAuth TOTP Secret (https://www.ssl.com/how-to/automate-esigner-ev-code-signing)
         
         REGISTRY_PASSWORD = credentials('es-github-token')   // Github Token for Pull codesigner Docker Image
-        REGISTRY_USERNAME = 'bayrakmustafa'                  // Github Registry Username for Pull codesigner Docker Image
+        REGISTRY_USERNAME = 'sslcom'                  // Github Registry Username for Pull codesigner Docker Image
         ENVIRONMENT_NAME  = 'TEST'                           // SSL.com Environment Name. For Demo Account It can be 'TEST' otherwise it will be 'PROD'
     }
 
@@ -216,7 +216,7 @@ pipeline {
         TOTP_SECRET       = credentials('es-totp-secret')    // OAuth TOTP Secret (https://www.ssl.com/how-to/automate-esigner-ev-code-signing)
         
         REGISTRY_PASSWORD = credentials('es-github-token')   // Github Token for Pull codesigner Docker Image
-        REGISTRY_USERNAME = 'bayrakmustafa'                  // Github Registry Username for Pull codesigner Docker Image
+        REGISTRY_USERNAME = 'sslcom'                  // Github Registry Username for Pull codesigner Docker Image
         ENVIRONMENT_NAME  = 'TEST'                           // SSL.com Environment Name. For Demo Account It can be 'TEST' otherwise it will be 'PROD'
     }
 
@@ -283,7 +283,7 @@ pipeline {
         TOTP_SECRET       = credentials('es-totp-secret')    // OAuth TOTP Secret (https://www.ssl.com/how-to/automate-esigner-ev-code-signing)
         
         REGISTRY_PASSWORD = credentials('es-github-token')   // Github Token for Pull codesigner Docker Image
-        REGISTRY_USERNAME = 'bayrakmustafa'                  // Github Registry Username for Pull codesigner Docker Image
+        REGISTRY_USERNAME = 'sslcom'                  // Github Registry Username for Pull codesigner Docker Image
         ENVIRONMENT_NAME  = 'TEST'                           // SSL.com Environment Name. For Demo Account It can be 'TEST' otherwise it will be 'PROD'
     }
 

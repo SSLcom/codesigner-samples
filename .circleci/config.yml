@@ -403,7 +403,6 @@ jobs:
   codesigner-sign-artifact:
       # Create an environment variable
       environment:
-          REGISTRY_USERNAME: bayrakmustafa
           ENVIRONMENT_NAME: TEST
           COMMAND: sign
           WORKSPACE: /home/circleci/project

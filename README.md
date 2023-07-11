@@ -1,9 +1,9 @@
 # Sign with CodeSignTool
 
-[![GitHub Actions Status](https://github.com/bayrakmustafa/codesigner-samples/workflows/CodeSignTool/badge.svg)](https://github.com/bayrakmustafa/codesigner-samples)
-[![Build Status](https://img.shields.io/circleci/build/github/bayrakmustafa/codesigner-samples/main.svg?style=plastic&label=Circle%20CI&branch=main)](https://circleci.com/gh/bayrakmustafa/codesigner-samples/tree/main)
-[![GitlabCI](https://gitlab.com/mustafabayrak/codesigner-samples/badges/main/pipeline.svg?key_text=Gitlab%20CI)](https://gitlab.com/mustafabayrak/codesigner-samples/-/commits/main)
-[![Build Status](https://img.shields.io/travis/bayrakmustafa/codesigner-samples.svg?style=plastic&label=Travis%20CI&branch=main)](https://app.travis-ci.com/bayrakmustafa/codesigner-samples)
+[![GitHub Actions Status](https://github.com/sslcom/codesigner-samples/workflows/CodeSignTool/badge.svg)](https://github.com/sslcom/codesigner-samples)
+[![Build Status](https://img.shields.io/circleci/build/github/sslcom/codesigner-samples/main.svg?style=plastic&label=Circle%20CI&branch=main)](https://circleci.com/gh/sslcom/codesigner-samples/tree/main)
+[![GitlabCI](https://gitlab.com/sslcom/codesigner-samples/badges/main/pipeline.svg?key_text=Gitlab%20CI)](https://gitlab.com/mustafabayrak/codesigner-samples/-/commits/main)
+[![Build Status](https://img.shields.io/travis/sslcom/codesigner-samples.svg?style=plastic&label=Travis%20CI&branch=main)](https://app.travis-ci.com/sslcom/codesigner-samples)
 
 CodeSignTool is a secure, privacy-oriented multi-platform Java command line utility for remotely signing Microsoft Authenticode and Java code objects with eSigner EV code signing certificates. Hashes of the files are sent to SSL.com for signing so that the code itself is not sent. This is ideal where sensitive files need to be signed, but should not be sent over the wire for signing. CodeSignTool is also ideal for automated batch processes for high volume signings or integration into existing CI/CD pipeline workflows.
 
@@ -116,7 +116,7 @@ jobs:
 
       # 5) This is the step where the created DLL or EXE (artifact) files will be signed with CodeSignTool.
       - name: Sign Artifact with CodeSignTool
-        uses: bayrakmustafa/actions-codesigner@develop
+        uses: sslcom/actions-codesigner@develop
         with:
           # Sign and timestamp code object.
           command: sign
@@ -195,7 +195,7 @@ jobs:
 
       # 5) This is the step where the created JAR (artifact) files will be signed with CodeSignTool.
       - name: Sign Artifact with CodeSignTool
-        uses: bayrakmustafa/actions-codesigner@develop
+        uses: sslcom/actions-codesigner@develop
         with:
           # Sign and timestamp code object.
           command: sign
@@ -279,7 +279,7 @@ jobs:
 
       # 6) This is the step where the created JAR (artifact) files will be signed with CodeSignTool.
       - name: Sign Artifact with CodeSignTool
-        uses: bayrakmustafa/actions-codesigner@develop
+        uses: sslcom/actions-codesigner@develop
         with:
           # Sign and timestamp code object.
           command: sign
@@ -405,7 +405,7 @@ jobs:
 
       # 3) This is the step where the created JAR (artifact) files will be signed with CodeSignTool.
       - name: Sign Artifact with CodeSignTool
-        uses: bayrakmustafa/actions-codesigner@develop
+        uses: sslcom/actions-codesigner@develop
         with:
           # Sign and timestamp code object.
           command: sign
@@ -531,7 +531,7 @@ jobs:
 
       # 3) This is the step where the created JAR (artifact) files will be signed with CodeSignTool.
       - name: Sign Artifact with CodeSignTool
-        uses: bayrakmustafa/actions-codesigner@develop
+        uses: sslcom/actions-codesigner@develop
         with:
           # Sign and timestamp code object.
           command: sign
@@ -591,7 +591,7 @@ jobs:
 
       # 3) This is the step PS1 file will be signed with CodeSignTool.
       - name: Sign Artifact with CodeSignTool
-        uses: bayrakmustafa/actions-codesigner@develop
+        uses: sslcom/actions-codesigner@develop
         with:
           # Sign and timestamp code object.
           command: sign

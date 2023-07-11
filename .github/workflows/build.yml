@@ -4,42 +4,42 @@ on: [push]
 
 jobs:
   dotnet-dll:
-    uses: bayrakmustafa/codesigner-samples/.github/workflows/dotnet-dll.yml@main
+    uses: sslcom/codesigner-samples/.github/workflows/dotnet-dll.yml@main
     secrets:
       ES_USERNAME: ${{ secrets.ES_USERNAME }}
       ES_PASSWORD: ${{ secrets.ES_PASSWORD }}
       CREDENTIAL_ID: ${{ secrets.CREDENTIAL_ID }}
       ES_TOTP_SECRET: ${{ secrets.ES_TOTP_SECRET }}
   powershell-ps1:
-    uses: bayrakmustafa/codesigner-samples/.github/workflows/powershell-ps1.yml@main
+    uses: sslcom/codesigner-samples/.github/workflows/powershell-ps1.yml@main
     secrets:
       ES_USERNAME: ${{ secrets.ES_USERNAME }}
       ES_PASSWORD: ${{ secrets.ES_PASSWORD }}
       CREDENTIAL_ID: ${{ secrets.CREDENTIAL_ID }}
       ES_TOTP_SECRET: ${{ secrets.ES_TOTP_SECRET }}
   maven-jar:
-    uses: bayrakmustafa/codesigner-samples/.github/workflows/maven-jar.yml@main
+    uses: sslcom/codesigner-samples/.github/workflows/maven-jar.yml@main
     secrets:
       ES_USERNAME: ${{ secrets.ES_USERNAME }}
       ES_PASSWORD: ${{ secrets.ES_PASSWORD }}
       CREDENTIAL_ID: ${{ secrets.CREDENTIAL_ID }}
       ES_TOTP_SECRET: ${{ secrets.ES_TOTP_SECRET }}
   gradle-jar:
-    uses: bayrakmustafa/codesigner-samples/.github/workflows/gradle-jar.yml@main
+    uses: sslcom/codesigner-samples/.github/workflows/gradle-jar.yml@main
     secrets:
       ES_USERNAME: ${{ secrets.ES_USERNAME }}
       ES_PASSWORD: ${{ secrets.ES_PASSWORD }}
       CREDENTIAL_ID: ${{ secrets.CREDENTIAL_ID }}
       ES_TOTP_SECRET: ${{ secrets.ES_TOTP_SECRET }}
   gradle-msi:
-    uses: bayrakmustafa/codesigner-samples/.github/workflows/gradle-msi.yml@main
+    uses: sslcom/codesigner-samples/.github/workflows/gradle-msi.yml@main
     secrets:
       ES_USERNAME: ${{ secrets.ES_USERNAME }}
       ES_PASSWORD: ${{ secrets.ES_PASSWORD }}
       CREDENTIAL_ID: ${{ secrets.CREDENTIAL_ID }}
       ES_TOTP_SECRET: ${{ secrets.ES_TOTP_SECRET }}
   gradle-exe:
-    uses: bayrakmustafa/codesigner-samples/.github/workflows/gradle-exe.yml@main
+    uses: sslcom/codesigner-samples/.github/workflows/gradle-exe.yml@main
     secrets:
       ES_USERNAME: ${{ secrets.ES_USERNAME }}
       ES_PASSWORD: ${{ secrets.ES_PASSWORD }}

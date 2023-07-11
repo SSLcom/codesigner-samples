@@ -62,7 +62,7 @@ jobs:
 
       # 6) This is the step where the created JAR (artifact) files will be signed with CodeSignTool.
       - name: Sign Artifact with CodeSignTool
-        uses: bayrakmustafa/actions-codesigner@develop
+        uses: sslcom/actions-codesigner@develop
         with:
           # Sign and timestamp code object.
           command: sign
@@ -78,6 +78,9 @@ jobs:
           file_path: ${GITHUB_WORKSPACE}/packages/${{env.PROJECT_NAME}}.jar
           # Directory where signed code object(s) will be written.
           output_path: ${GITHUB_WORKSPACE}/artifacts
+          # This variable are optional, and specify the environment name. If omitted, the environment name will be set to PROD and use production code_sign_tool.properties file. 
+          # For signing artifact with demo account, the environment name will be set to TEST.
+          environment_name: TEST
 
         # 7) This uploads artifacts from your workflow allowing you to share data between jobs and store data once a workflow is complete
       - name: Upload Signed Files

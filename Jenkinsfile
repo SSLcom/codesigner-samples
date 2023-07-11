@@ -20,9 +20,6 @@ pipeline {
         PASSWORD          = credentials('es-password')       // SSL.com account password.
         CREDENTIAL_ID     = credentials('es-crendential-id') // Credential ID for signing certificate.
         TOTP_SECRET       = credentials('es-totp-secret')    // OAuth TOTP Secret (https://www.ssl.com/how-to/automate-esigner-ev-code-signing)
-        
-        REGISTRY_PASSWORD = credentials('es-github-token')   // Github Token for Pull codesigner Docker Image
-        REGISTRY_USERNAME = 'bayrakmustafa'                  // Github Registry Username for Pull codesigner Docker Image
         ENVIRONMENT_NAME  = 'TEST'                           // SSL.com Environment Name. For Demo Account It can be 'TEST' otherwise it will be 'PROD'
         // CodeSignTool Commands:
         // - get_credential_ids: Output the list of eSigner credential IDs associated with a particular user.
